@@ -1,0 +1,7 @@
+[permissions]
+allow = [
+  "Bash(curl -s --max-time 15 \"https://api-docs.deepseek.com/\" 2>&1 | head -200)",
+  "Bash(curl -s --max-time 15 \"https://www.google.com/search?q=deepseek+v4.1+rumor\" -H \"User-Agent: Mozilla/5.0\" 2>&1 | head -80)",
+  "Bash(curl -s --max-time 15 \"https://hn.algolia.com/api/v1/search?query=deepseek+v4.1\" 2>&1)",
+  "Bash(curl -s --max-time 15 \"https://hn.algolia.com/api/v1/search?query=deepseek+V4.1+roadmap+next+version&tags=comment&hitsPerPage=30\" 2>&1)",
+]

@@ -1,0 +1,587 @@
+query: CSS filter contrast blur "liquid" edge glitch effect techniques
+
+answer:
+  To achieve liquid or gooey effects, use a CSS filter chain of blur and contrast on a container with non-transparent content [1][2]. The `blur()` spreads the edges of elements, while a high `contrast()` value threshold-filters those blurred areas back into sharp, merged shapes [1][2][3].
+
+For "liquid glass" refraction, use `backdrop-filter` with an SVG `feDisplacementMap` [4][5][6]. Apply a displacement map image that targets only the edges of the element to mimic lens refraction [5][6].
+
+```css
+/* Gooey Effect */
+.container {
+  filter: blur(7px) contrast(16);
+}
+
+/* Liquid Glass Refraction */
+.glass {
+  backdrop-filter: blur(5px) url(#liquid-lens);
+}
+```
+
+To resolve edge glitches and jitter, implement node-aware padding by extending the glass layer slightly beyond its border and clipping it back [7]. For better performance, limit concurrent glass panels and avoid applying filters directly to text-containing elements to prevent sub-pixel antialiasing loss [7].
+
+sources (5):
+
+1. Canvas Metaballs: a Liquid Blood Effect (blur + contrast filter) | Effect.Labs Blog
+   https://effect-labs.com/en/pages/blog/blood-goo-metaballs-canvas.html
+   Canvas Metaballs: a Liquid Blood Effect (blur + contrast filter) | Effect.Labs Blog
+
+Metaballs — those organic shapes that merge when they get close, like drops of mercury or lava — have long had a reputation for being expensive: the exact calculation evaluates a scalar field for every pixel. This article describes the Cursed Blood Goo effect, the free effect from Effect.Labs' October 2026 Halloween sprint: liquid blood that drips, merges and accumulates into a pool, with a blob that follows the cursor — all in pure Canvas with a single CSS filter line, no library, no asset, at 60fps.
+
+Definition — Metaballs. Blobs whose surfaces weld together as soon as they overlap, giving a liquid/gelatinous appearance. The classic method computes, for each pixel, the sum of each blob's influence and thresholds the result. We will achieve the same look without that per-pixel cost.
+
+## The trick: blur + contrast
+
+The technique (popularised by Lucas Bebber) relies on two chained filters applied to the layer containing the blobs:
+
+1. `blur()` spreads the edges of each blob into a soft gradient. Two nearby blobs have their fuzzy halos overlap.
+2. `contrast()` at a high value crushes those intermediate values: everything below the threshold snaps to the background, everything above to full color. Result: a reconstructed sharp edge, and wherever two halos overlapped, a single welded organic mass.
+
+```
+.goo-scene { background: #0b0406; }            /* OPAQUE dark background, mandatory */
+.goo-canvas { filter: blur(7px) contrast(16); } /* the metaball combo */
+```
+
+Pitfall #1.`contrast()` acts on color channels, never on alpha. You must therefore draw solid blobs on an opaque dark background: the blur mixes blob color with background, then contrast re-thresholds. On a transparent canvas, no merging occurs — this is the most common mistake.
+
+## Drawing the drops
+
+On the Canvas side, it is intentionally simple: fill the opaque background, then draw each drop as a plain filled circle of blood color. All the "liquid" comes from the CSS filter applied on top.
+
+```
+const ctx = canvas.getContext('2d');
+const COLOR = '#c81e2d';
+
+function render() {
+  ctx.fillStyle = '#0b0406';           // opaque background (re-thresholded to black by contrast)
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = COLOR;
+  for (const d of drops) {             // each drop = a filled disk
+    ctx.beginPath();
+    ctx.arc(d.x, d.y, d.r, 0, 6.2832);
+    ctx.fill();
+  }
+}
+```
+
+## The physics: fall, pool, cursor
+
+Three behaviors bring the blood to life, all very cheap:
+
+### 1. The drip
+
+A new drop spawns at the top at a regular interval, subject to gravity. A few dozen are enough — the visual merging does the rest.
+
+```
+if (frame % 11 === 0 && drops.length < 130)
+  drops.push({ x: Math.random()*W, y: -12, vx: 0, vy: 1.2,
+               r: 9 + Math.random()*9 });
+
+for (const d of drops) { d.vy += 0.28; d.x += d.vx; d.y += d.vy; }
+```
+
+### 2. The rising pool
+
+When a drop reaches the floor, it does not disappear: it feeds the pool level (proportional to its area). The pool is drawn as a sinusoidally rippled surface — and it slowly drains to reach an equilibrium rather than overflow.
+
+```
+if (d.y + d.r*0.4 >= H - pool) { pool += d.r*d.r / W * 0.8; remove(d); }
+pool = Math.max(0, pool - 0.14);     // slow drainage → equilibrium
+```
+
+### 3. The cursor blob
+
+The cursor carries a large blob (which merges with everything it touches, thanks to the filter). Moving fast shoots droplets in the direction of movement, and it attracts nearby drops. This is what makes the effect feel tactile.
+
+```
+// blob following the cursor (smoothed)
+bx += (mx - bx) * 0.3; by += (my - by) * 0.3;
+// cursor speed → droplet projection
+const speed = Math.hypot(mx - pmx, my - pmy);
+if (speed > 13) drops.push({ x: bx, y: by,
+  vx: (mx - pmx)*0.07, vy: (my - pmy)*0.07 + 1, r: 6 + Math.random()*6 });
+```
+
+The full code (handling of`devicePixelRatio`, drop attraction toward the cursor, customizable background) is available directly on the Visual Effects catalog page— this effect is free.
+
+## Customize: blood, slime, ink, lava
+
+A single color variable transforms the effect. Two or three tweaks are enough to change the mood:
+
+| Parameter | Range | Effect |
+| --- | --- | --- |
+| Color | #c81e2d / #5ad12e / #111 / #ff7a18 | Blood / toxic slime / ink / lava |
+| `contrast()` | 10 → 22 | Higher = sharper edges, more "gelatinous" |
+| `blur()` | 5 → 10 px | Thickness of the merge between drops |
+| rate`frame % N` | 6 → 20 | Drip speed |
+
+Remember to keep the opaque background consistent with the hue (a very dark green for slime, for example), otherwise the contrast re-thresholding turns grey.
+
+## Performance & accessibility
+
+A single canvas, ~100 drops, one GPU filter: the effect holds 60fps on recent mobile devices. A few safeguards:
+
+- Cap the number of drops (130 here) and`devicePixelRatio` to 2.
+- The`blur()+contrast()` filter is executed by the GPU compositor — much faster than a scalar field computed in JS.
+- `prefers-reduced-motion`: draw a frozen scene (pool + a few resting drops), no animation loop. The effect is purely decorative; content remains accessible.
+
+## What ChatGPT and v0 miss
+
+Ask a generator for "canvas metaballs" and you almost always get a per-pixel scalar field (double loop over width × height), which lags as soon as you go beyond a few blobs. What AI misses:
+
+- The blur + contrast trick: the "free" GPU solution is rarely suggested spontaneously.
+- The mandatory opaque background: AI-generated code draws on a transparent canvas → no merging, and nobody understands why.
+- The physics that brings it to life: rising pool, drainage to equilibrium, droplet projection at cursor speed.
+- devicePixelRatio: forgotten → blurry render on Retina (ironic for an already-blurred effect).
+- prefers-reduced-motion: an accessibility rule regularly absent from generated results.
+
+## FAQ
+
+### Does the blur + contrast filter also work in DOM/SVG?
+
+Yes — that is even its original use case (on`div` elements or an SVG filter combining`feGaussianBlur`+`feColorMatrix`). With Canvas you keep a single element to composite, which remains the simplest and fastest approach.
+
+### Can I use it with React, Vue or Svelte?
+
+Yes: vanilla JS code, no npm dependency. In React, wrap the loop in a`useEffect` with cleanup (`cancelAnimationFrame`); in Svelte, use`onMount`/`onDestroy`.
+
+### The full, ready-to-use code
+
+This effect is free this month. Customize the color live and copy-paste the code. Access 800+ more premium effects with the subscription.
+
+Join the founders — €9.90 / month
+
+## Related Articles
+
+### Liquid Metal Shader in WebGL: complete tutorial
+
+### Glitch & Distortion Effects
+
+### Generative Patterns in CSS
+
+## Get our tutorials
+
+One technical article per week, straight to your inbox.
+
+Subscribe
+
+2. CSS/SVG Gooey Effect — How It Works and How to Build It | Doathingy Blog
+   https://doathingy.com/blog/csssvg-gooey-effect-demo
+   CSS/SVG Gooey Effect — How It Works and How to Build It | Doathingy Blog
+
+— try it live open full screen ↗
+
+You've probably seen the gooey effect on creative portfolios and interactive menus: circles that squish and stick together when they overlap, blobs that merge and separate as they animate. It looks like it requires a physics engine or canvas-based rendering, but it's actually a clever combination of an SVG filter and a CSS`blur`+`contrast` trick that runs entirely in the browser's compositing pipeline. The CSS/SVG Gooey Effect Demo lets you tune every parameter and copy the ready-to-use code.
+
+## How the gooey effect works
+
+The trick uses two CSS filters applied together on the parent container:
+
+1. Gaussian blur — blurs all the child elements, making them bleed into each other where they're close
+2. High contrast — cranks the contrast to an extreme level, which causes the soft blurred edges to snap back to hard edges — but only where the combined opacity is above a threshold
+
+The result: where two blurred circles overlap or nearly touch, their blurred edges blend into a single connected shape. The contrast filter then renders that merged region as a solid filled shape, making them look like they've merged into one blob.
+
+In CSS this looks like:
+
+```
+.gooey-container {
+  filter: url('#gooey-filter') blur(0px);
+}
+
+/* In SVG (hidden, placed anywhere in the DOM): */
+<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0">
+  <defs>
+    <filter id="gooey-filter">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+      <feColorMatrix in="blur" mode="matrix"
+        values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -10"
+        result="gooey" />
+      <feComposite in="SourceGraphic" in2="gooey" operator="atop" />
+    </filter>
+  </defs>
+</svg>
+```
+
+## Breaking down the SVG filter primitives
+
+### feGaussianBlur
+
+The`stdDeviation` controls how much the shapes bleed into each other. Higher values create a longer "neck" between merging blobs — they attract each other from further away. Lower values require shapes to be closer before they connect. The demo tool lets you adjust this in real time to find the right value for your use case.
+
+### feColorMatrix
+
+This is the contrast step. The matrix values`0 0 0 20 -10` on the alpha row mean: multiply the alpha channel by 20, then subtract 10 (which in alpha space means subtract 2.55 × 10 ≈ 2550/255 of alpha). Any pixel with alpha below about 0.5 gets pushed to 0 (transparent); any pixel with alpha above 0.5 gets pushed to 1 (fully opaque). This is what creates the hard snap-to-edge behaviour.
+
+Tweaking these values changes the threshold at which shapes merge — the demo exposes this as a simple "stickiness" slider.
+
+### feComposite
+
+The optional composite step at the end restores the original colours of the source elements. Without it, the merged shape inherits the colour of the underlying element's alpha-composited result (usually fine), but adding`feComposite in="SourceGraphic" in2="gooey" operator="atop"` clips the original source graphic to only show within the gooey shape — giving you full colour fidelity.
+
+## What you can build with it
+
+- Animated blob menus — navigation items that morph together on hover
+- Liquid loaders — loading animations where dots merge as they orbit
+- Organic background shapes — animating blob clusters as decorative background elements
+- Interactive particle systems — elements that attract and merge based on cursor position
+- Button hover states — the Gooey Fluid Button Generator extends this specifically for buttons
+
+## Browser support and performance
+
+SVG filters are well-supported across all modern browsers — Chrome, Firefox, Safari, and Edge all render the gooey effect correctly. Performance is generally good for a moderate number of animated elements (up to ~20 simultaneous blobs animating), but the Gaussian blur + contrast combination is GPU-intensive. Animating hundreds of elements simultaneously will cause frame drops on lower-end devices.
+
+A practical tip: apply`will-change: transform` to animated child elements and`transform: translateZ(0)` to the container to encourage GPU compositing, which typically halves the paint cost.
+
+Build your gooey effect →Adjust blob count, size, blur intensity, and stickiness — then copy the ready-to-use HTML and CSS.
+
+Open the demo →
+
+3. The Gooey Effect | CSS-Tricks
+   https://css-tricks.com/gooey-effect/
+   The Gooey Effect | CSS-Tricks
+
+The following is a post by Lucas Bebber. Lucas the originator of some of the most creative effects I’ve ever seen on the web. So much so I couldn’t resist blogging about them myself several times. Much better this time: we got the man himself to explain how SVG filters work and how you can use them to create a very cool gooey effect.
+
+A while ago, Chris wrote about Shape Blobbing in CSS. The effect is cool and the technique behind it is clever, but the approach, through regular CSS filters, has several drawbacks: no transparency, no content inside the blobs, hard to make it in any color besides black and white, etc.
+
+However, these days, playing around with SVG filters, I figured I could use them to get around most of the problems of a pure CSS approach. Here you can see a gooey menu I made to demonstrate the effect:
+
+See the Pen CSS Gooey Menu (Version 1) by Lucas Bebber (@lbebber) on CodePen.
+
+### SVG Filters 101
+
+SVG filters are quite powerful. It is a pretty extensive topic. Here we will only cover the basics necessary to understand how this effect works.
+
+Despite the name, we can apply SVG filters on regular DOM elements through CSS, in most browsers.
+
+This is the basic syntax to define a filter:
+
+```
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+  <defs>
+    <filter id="name-your-filter-here">
+      ...          
+      <!-- insert filters here -->
+      ...
+    </filter>
+    ...
+  </defs>
+</svg>
+```
+
+To apply a SVG filter to a DOM element:
+
+```
+.selector {
+  filter: url('#name-of-your-filter-here');
+
+  /* you can also load filters from external SVGs this way: */
+  filter: url('filters.svg#name-of-your-other-filter-here');
+}
+```
+
+You may need vendor prefixes to use the filter property.
+
+A` ` element contains one or more filter primitives, which are the operations done by the filter, e.g. blur, color transform, shading. A complete list of filter primitives can be found here.
+
+Let’s see a couple of examples:
+
+See the Pen svg blur demonstration by Lucas Bebber (@lbebber) on CodePen.
+
+```
+<filter id="blur">
+  <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
+</filter>
+```
+
+This filter will do a single simple 3px blur on the object. Notice the`in="SourceGraphic"` attribute. The`in` attribute defines the input of a filter primitive.`SourceGraphic` is a keyword that returns the original, pre-filter graphic of the element. So what this means is that the input of the blur filter will be the original graphic of the object. Pretty straightforward.
+
+Now let’s see a common but more complex effect: a drop shadow filter. This will be useful in demonstrating how to chain filter primitives together:
+
+See the Pen svg drop shadow demonstration by Lucas Bebber (@lbebber) on CodePen.
+
+```
+<filter id="drop-shadow">
+  <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="shadow" />
+  <feOffset in="shadow" dx="3" dy="4" result="shadow" />
+  <feColorMatrix in="shadow" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.6 0" result="shadow" />
+  <feBlend in="SourceGraphic" in2="shadow" />
+</filter>
+```
+
+Take a look at the`result` attribute of the first filter and the subsequent`in` attributes. With the`result` attribute you can name the result of a filter and then apply a filter to that result instead of the source graphic. This allows you to, in this example, blur an object, darken the blurred object, and then shift the position of the blurred and darkened object.
+
+Pay attention to the last element there, the` ` primitive. It demonstrates that some filter primitives take multiple inputs (the`in2` parameter), and that you can call the`SourceGraphic` keyword multiple times and at any point of the filter. That last filter, in this example, is taking both the`SourceGraphic` keyword and the`shadow` result to put back the original image over the shadow we made.
+
+Now that the basics of SVG filters are covered, let’s take a look at how to make that gooey effect.
+
+### Making Things Stick
+
+The basic technique has been already covered here. To recap, the idea is to blur two or more objects together and increase the contrast. Pretty simple and works like a charm:
+
+See the Pen metaballs demonstration by Lucas Bebber (@lbebber) on CodePen.
+
+However, as we’ve seen before, this also
+
+1. Messes the colors up, making it hard to do anything other than black and white.
+2. Blurs the content together, making it unusable.
+3. The container requires a background, so no transparency.
+
+All in all, this makes this effect usually unpractical.
+
+With SVG filters, though, we can do some things that were not possible with CSS filters alone: we can increase the contrast of only the alpha channel, not changing the colors; and we can, with the`SourceGraphic` keyword we’ve seen before, make the content visible as well. Also, since we’re dealing with the alpha channel, not only it will be transparent, a transparent background is *required*, so be careful with that.
+
+So this is the basic code:
+
+```
+<filter id="goo">
+  <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+  <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="goo" />
+  <feBlend in="SourceGraphic" in2="goo" />
+</filter>
+```
+
+It’s quite short, let’s break it down:
+
+1. First, we apply a 10px blur to the`SourceGraphic` and name that result.
+2. Then, to the previous result, we apply a color matrix filter in order to increase the contrast of the alpha channel.
+3. Finally, we insert the original graphics over the effect we made.
+
+### About Color Matrices
+
+If you haven’t used a color matrix filter before, it might need some explanation. You can think of it as a table of four rows and five columns. It looks like this:
+
+```
+   | R | G | B | A | +
+---|-------------------
+ R | 1 | 0 | 0 | 0 | 0
+---|-------------------
+ G | 0 | 1 | 0 | 0 | 0
+---|-------------------
+ B | 0 | 0 | 1 | 0 | 0
+---|-------------------
+ A | 0 | 0 | 0 | 1 | 0
+---|-------------------
+```
+
+Each row represents a channel (red, green, blue and alpha) and is used to set the channel’s value. Each of the first four columns represents a channel as well, and they return the current value of their respective channels. A number in a cell, then, adds to its row channel the result of the multiplication of that number by the current value of the channel represented by its column. For example, a 0.5 on the row R, column G, will, for each pixel, add to the red channel the current value of green*0.5. The last column doesn’t represent any channel and is used for addition/subtraction, meaning that a number there will add to its channel its value multiplied by 255.
+
+That’s a lengthy explanation, but using the filter is quite simple. In our case, since we are only increasing the contrast of the alpha channel, our matrix will look like this:
+
+```
+   | R | G | B | A | +
+---|-------------------
+ R | 1 | 0 | 0 | 0 | 0
+---|-------------------
+ G | 0 | 1 | 0 | 0 | 0
+---|-------------------
+ B | 0 | 0 | 1 | 0 | 0
+---|-------------------
+ A | 0 | 0 | 0 |18 |-7
+---|-------------------
+```
+
+This leaves the RGB channels unmodified, multiplies the value of the alpha channel by 18, and then subtracts 7*255 from that value, effectively increasing the contrast of the transparency alone. These values can be tweaked to your needs.
+
+To apply this matrix to our`feColorMatrix` filter, all we have to do is write these numbers sequentially, like this:
+
+```
+values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"
+```
+
+### Demo
+
+And with that we have our basic effect ready! Here is it:
+
+See the Pen svg goo effect demonstration by Lucas Bebber (@lbebber) on CodePen.
+
+You can then customize it to your needs, like adding a drop shadow, using different colors for each element, or whatever have you!
+
+### Considerations
+
+To be able to apply this filter to pointy objects like rectangles, we have to take a slightly more sophisticated approach. Instead of just drawing the original image over the goo effect, we c
+
+4. Liquid Glass in CSS (and SVG) - Ekino FR
+   https://www.ekino.fr/publications/liquid-glass-in-css-and-svg/
+   Liquid Glass in CSS (and SVG) - Ekino FR
+
+Skip to content
+
+6 Minutes read Tech
+
+ekino paris Team communication
+
+Background Picture: Aldrin near the lunar module (Apollo 11)
+
+### TL;DR
+
+Apple’s Liquid Glass design features complex refraction that distorts content beneath UI elements. While CSS backdrop-filter doesn’t natively support such effects, SVG filters can bridge the gap. Using, we can replicate similar results in Chromium-based browsers.
+
+### What is Liquid Glass ?
+
+Liquid Glass is Apple’s new design language introduced in their next OS iteration (version 26), evolving from the simpler blur effects first seen in iOS 7.
+
+Unlike simple blurs, Liquid Glass mimics real glass’s optical properties — most notably, refraction.
+
+There are several variations of this effect depending on context:
+
+Safari App — Introducing Liquid Glass | Apple
+
+Sometimes the element is fully transparent:
+
+Text magnification — Introducing Liquid Glass | Apple
+
+Other times it blurs and distorts heavily the content beneath it:
+
+Apple TV+ App — Introducing Liquid Glass | Apple
+
+A constant feature, however, is that the element’s borders create a symmetrical distortion of the inner content beyond a certain threshold.
+
+Answering a phone call — Introducing Liquid Glass | Apple
+
+While Liquid Glass encompasses more than just border distortions, this article will focus primarily on that aspect.
+
+### The CSS implementation
+
+CSS offers the backdrop-filter property, which lets you apply effects like blur or brightness to the content behind an element. These filters stack cumulatively, applied in sequence. A simple setup might look like this:
+
+```
+.my-element {    backdrop-filter: blur(10px) brightness(0.8);}
+```
+
+However, CSS lacks a native way to create distortion or refraction effects. To achieve those, we need to harness SVG filters. You can reference an SVG filter inside backdrop-filter by using a URL syntax like:
+
+```
+backdrop-filter: url(./my-svg.svg#myfilter);
+```
+
+Note: One limitation is that backdrop-filter only affects content within the element’s boundaries. In Apple’s Liquid Glass presentation, some elements refract content beyond their borders—something we can’t replicate using backdrop-filter alone.
+
+### The SVG implementation
+
+The SVG specification lets you define filters that produce complex visual effects on shapes and symbols. Although SVG is a vector format, filters operate in a rasterized context — converting vector graphics into pixel-based images before applying effects. Filters are composed of building blocks called filter primitives, which fall into three main categories:
+
+- Modifiers — transform an existing graphic (e.g.,)
+- Sources — generate new graphics (e.g.,)
+- Combiners — merge multiple graphics to create a new output
+
+The primitive we need for refraction effects belongs to this last category.
+
+#### 
+
+The displacement filter combines two inputs to produce the distorted output. The first input, usually SourceGraphic, is the original visual we want to distort. The second input is the displacement map, which controls how each pixel of the original image is shifted. Each pixel’s offset is determined by reading the corresponding pixel in the displacement map.
+
+We can generate a random displacement map using, which creates chaotic distortion patterns.
+
+```
+<filter id="turbulence-displacement"        x="0" y="0"        width="100%" height="100%">   <!-- Source -->   <feTurbulence type="turbulence"                 baseFrequency="0.05"                 numOctaves="2"                 result="noise" />   <!-- Combiner -->   <feDisplacementMap in="SourceGraphic"                      in2="noise"                      scale="20"                      xChannelSelector="R"                      yChannelSelector="G" /></filter>
+```
+
+Turbulence-based distortions with varying baseFrequency.
+
+However, to achieve precise border distortions like in Liquid Glass, we need a dedicated displacement map image. This is where comes in: it allows us to use external graphics as filter inputs.
+
+```
+<filter id="image-displacement"        x="0" y="0"        width="100%" height="100%">   <!-- Source -->   <feImage xlink:href="displacement-map.svg"            result="dispMap" />   <!-- Combiner -->   <feDisplacementMap in="SourceGraphic"                      in2="dispMap"                      scale="30"                      xChannelSelector="R"                      yChannelSelector="G" /></filter>
+```
+
+While can load raster images like PNGs, we’ll use a second SVG file to generate the displacement map. Creating it as SVG lets us precisely match the size and border radius of the target element, which is crucial for accurate distortion. A “generic” map wouldn’t scale correctly across varying element dimensions, leading to misaligned or inconsistent refraction. And although the source is vector-based, keep in mind that all filters—including displacement—operate on a rasterized version, so there’s no inherent quality gain from using SVG.
+
+### Creating the displacement map
+
+The xChannelSelector and yChannelSelector attributes determine which color channels (R, G, B, or A) drive the displacement along the horizontal and vertical axes. The selected channel provides a value between 0 and 255 for each pixel, which gets mapped like this:
+
+- 00 → full negative offset (–1)
+- 80 (128) → no displacement (0)
+- FF (255) → full positive offset (+1)
+
+These normalized values are then scaled using the scale attribute to produce the final displacement per axis.
+
+Using a solid gray image results in no displacement. The red channel (#808080) is used for the x-axis and the green channel (#808080) is used for the y-axis. The blue channel value is ignored.
+
+In contrast, using a solid red image (#FF0000) shifts pixels to the left on the x-axis and to the bottom on the y-axis. When displaced pixels fall outside the graphic boundaries, their values are sampled from a mirrored version of the original image to avoid harsh edges.
+
+What about gradients? Here I created a displacement map by layering two gradients, one for each axis.
+
+According to the scale value, the resulting picture is either zoomed in, zoomed out or even inverted.
+
+Linear gradients across the whole axis don’t produce distortion; they only scale the image uniformly. Real distortion requires irregular gradients.
+
+Note: In the image above, the zoom effect appears slightly skewed. Displacement rendering seems a bit off on macOS but looks correct on Windows. Fortunately, the difference is subtle and barely noticeable in the final result.
+
+The above example gets us closer to Liquid Glass’s effect but misses the subtle border distortions and rounded corners. To fix this, I combined the linear gradient displacement map with a solid gray mask matching the element’s shape.
+
+Blurring this mask creates a smooth transition between displaced and non-displaced areas, mimicking the natural bending of edges.
+
+### Result
+
+The result is an approximate refraction effect that closely mimics Apple’s Liquid Glass aesthetic — at least visually. We can also push the idea further by simulating chromatic aberration which is a very common behaviour of real glass. You can see the result in motion on the following sandbox:
+
+https://medium.com/media/06cb8d52505e6180e5cfef4fc8e7d17b/href
+
+That said, the rendering isn’t as refined. One major limitation is the lack of super-sampling in SVG displacement filters, which leads to a pixelated look. This can be softened slightly with blur, but it’s not a perfect fix.
+
+### Constraints
+
+This proof of concept reveals several limitations when simulating refraction with SVG. Unlike Apple’s Liquid Glass, which works on arbitrary shapes — including text and icons — this approach currently only supports fixed-size rounded rectangles and circles.
+
+Compatibility is another major constraint: the technique only works reliably in Chromium-based browsers. While the displacement effect itself should be supported across most browsers, combining it with backdrop-
+
+5. Building a liquid-glass UI kit for the web — Sean Geng
+   https://seangeng.com/writing/building-a-liquid-glass-ui-kit
+   Building a liquid-glass UI kit for the web — Sean Geng
+
+I kept seeing "liquid glass" on the web that was really just`backdrop-filter: blur()` with a light border. Real glass does something blur can't: it refracts. The edges bend whatever's behind them like a lens. So I built Glacé(`npm i glaceui`), a little React kit where the glass actually bends light. Everything below is the real published package, running live, go ahead and poke it.
+
+shuffle
+
+Real glass
+
+The edges refract the gradient behind them, they don't just blur it. (Chromium; a frosted blur elsewhere.)
+
+Fire a toast
+
+## Blur hides the backdrop; refraction bends it
+
+The trick (from Aave's writeup and kube.io) is an SVG`feDisplacementMap`. You generate a displacement map: a little image where the red channel encodes horizontal bend and the blue channel vertical bend, with a neutral gray center that means "don't move." Feed it through a filter and the backdrop gets pushed around per-pixel.
+
+The important part is where the bend lives. You concentrate it at the rim: the center stays neutral (just a touch of blur), and only the edge band displaces. That's what reads as a pane of glass instead of a smear. Run it three times at slightly different scales for R, G, and B and you get the faint chromatic fringe real lenses have.
+
+```
+backdrop-filter: url(#glass) blur(2.5px) saturate(180%);
+
+```
+
+One detail people miss:`url()` filters inside`backdrop-filter` are Chromium only. Safari and Firefox quietly ignore them. So it's a progressive enhancement: feature-detect, and fall back to a plain frosted blur where it isn't supported.
+
+## The map has to match the element
+
+My first version generated one displacement map and stretched it onto everything. It looked great on a card and terrible on the sticky nav. A wide, short bar got a map built for a square, smeared into a rainbow across the whole surface. The heading scrolling underneath turned into mush.
+
+The fix is obvious in hindsight: generate the map at each element's real dimensions, so the rim band stays the right thickness whether it's a 40px button or a 1200px nav. A`ResizeObserver` regenerates on resize, and the maps are cached by size + shape so every same-sized surface shares one filter. Cheap, and correct at any aspect ratio.
+
+## Different glass, on purpose
+
+Aave models the bend as the derivative of a height profile across the bezel, which is a fancy way of saying the shape of the edge changes the look. So I made it a prop.`convex` magnifies outward like a lens,`concave` caves in,`bevel` is a crisp cut. Same component, three different pieces of glass:
+
+```
+<GlassCard profile="convex" />   // magnify
+<GlassCard profile="concave" />  // cave in
+<GlassCard profile="bevel" />    // crisp edge
+```
+
+## Buttons should feel like glass, too
+
+For the button I went back to Petr Knoll's liquid-glass button(the one B3's explorer uses) and stole the feel, not the markup. Three touches do most of the work: a specular sheen that sweeps across on hover and drops on press (the angle animated through`@property` so it glides), layered inset shadows for thickness, and a press that tips the glass back in 3D and sinks the shadow inward, like you actually pushed it. Hold one down and you can feel it.
+
+These are the real buttons, tap one and it fires a real glass toast:
+
+toastsuccesserroractionpromise
+
+## The honest part
+
+Refraction is Chromium-only, so a third of your users get frosted blur instead, which is fine, it still looks like glass, just flatter. The displacement runs on the GPU and is cheap, but it's another filter in the paint, so I don't put it on hundreds of elements. And`@property` transitions (for the sheen) degrade to a jump on older browsers. None of it breaks; it just gets simpler.
+
+That's it: real edge refraction, springy motion, light and dark, optional haptics, in toasts / buttons / panels / a raw` ` surface. It's MIT, the displacement engine is shared across the kit, and you can drag the glass around and tune the optics yourself in the Glass Lab.
+
+`npm i glaceui`· glaceui.com· GitHub

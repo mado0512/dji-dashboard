@@ -1,0 +1,888 @@
+query: CSS hue rotate animation gradient infinite loop blog
+
+answer:
+  To create an infinite hue-rotate animation, you can use the CSS `filter: hue-rotate()` function or animate a CSS custom property registered with `@property`.
+
+The `filter` approach is simple to implement for elements or images, though it rotates the hue of everything within that element [1][2].
+
+```css
+@keyframes hue-rotation {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+.animated-hue {
+  animation: hue-rotation 4s linear infinite;
+}
+```
+
+For more precise control without affecting other properties, use the `@property` rule to define a `--hue` variable and animate it directly within an `hsl()` color string [3][4].
+
+```css
+@property --hue {
+  syntax: "<number>";
+  initial-value: 0;
+  inherits: false;
+}
+
+@keyframes hue-rotate {
+  to { --hue: 360; }
+}
+
+.element {
+  background: hsl(calc(var(--hue) * 1deg) 100% 50%);
+  animation: hue-rotate 4s linear infinite;
+}
+```
+
+Using `@property` prevents the browser from interpolating via RGB, which often causes unwanted color shifts or gray midpoints [4][5][6].
+
+sources (5):
+
+1. CSS Hue-Rotate Filter: Complete Guide to Dynamic Color Shifting - CodeLucky
+   https://codelucky.com/css-hue-rotate-filter/
+   CSS Hue-Rotate Filter: Complete Guide to Dynamic Color Shifting - CodeLucky
+
+# CSS Hue-Rotate Filter: Complete Guide to Dynamic Color Shifting
+
+June 16, 2025
+
+The CSS hue-rotate filter is a powerful tool that allows web developers to dynamically shift the hue values of any HTML element, creating stunning color transformations without modifying the original image or element. This comprehensive guide will teach you everything you need to know about implementing and mastering the hue-rotate filter in your web projects.
+
+Table of Contents
+
+Toggle
+
+## Understanding Hue-Rotate Filter Fundamentals
+
+The`hue-rotate()` function is part of CSS filter effects that manipulates the hue channel of colors using the HSL color model. It rotates colors around the color wheel by a specified degree value, effectively shifting all colors in an element while maintaining their saturation and lightness values.
+
+Key Concept: Hue rotation works by moving colors around a 360-degree color wheel. A 0-degree rotation keeps colors unchanged, while 180 degrees creates complementary colors.
+
+### Basic Syntax and Values
+
+The hue-rotate filter accepts angle values in degrees, with the following syntax:
+
+```
+/* Basic syntax */
+filter: hue-rotate(angle);
+
+/* Examples */
+filter: hue-rotate(0deg);    /* No change */
+filter: hue-rotate(90deg);   /* Quarter rotation */
+filter: hue-rotate(180deg);  /* Half rotation */
+filter: hue-rotate(270deg);  /* Three-quarter rotation */
+filter: hue-rotate(360deg);  /* Full rotation (same as 0deg) */
+```
+
+## Practical Implementation Examples
+
+### Basic Hue Rotation Demonstration
+
+Let’s start with a simple example showing how hue-rotate affects different colored elements:
+
+Original`hue-rotate(0deg)`
+
+90° Rotation`hue-rotate(90deg)`
+
+180° Rotation`hue-rotate(180deg)`
+
+270° Rotation`hue-rotate(270deg)`
+
+### Interactive Hue Rotation Controller
+
+Experience real-time hue rotation with this interactive demonstration:
+
+Hue Rotation: 0°
+
+0° 90° 180° 270°
+
+## Advanced Techniques and Use Cases
+
+### Combining Hue-Rotate with Other Filters
+
+The hue-rotate filter becomes even more powerful when combined with other CSS filters. Here’s how to create complex visual effects:
+
+```
+/* Combining multiple filters */
+.enhanced-image {
+    filter: 
+        hue-rotate(45deg) 
+        brightness(1.2) 
+        contrast(1.1) 
+        saturate(1.3);
+}
+```
+
+Original
+
+Enhanced with Multiple Filters
+
+### Creating Smooth Color Animations
+
+One of the most exciting applications of hue-rotate is creating smooth color transitions and animations:
+
+```
+/* Continuous hue rotation animation */
+@keyframes hue-rotation {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+}
+
+.animated-hue {
+    animation: hue-rotation 4s linear infinite;
+}
+```
+
+Continuous Hue Animation
+
+## Browser Support and Performance
+
+### Compatibility Information
+
+The hue-rotate filter enjoys excellent browser support across modern browsers:
+
+- Conclusion
+- Chrome: Supported since version 53
+- Firefox: Supported since version 35
+- Safari: Supported since version 9.1
+- Edge: Supported since version 12
+
+### Performance Considerations
+
+While hue-rotate is hardware-accelerated in most modern browsers, consider these optimization tips:
+
+- Use transform3d hack: Add`transform: translateZ(0)` to force hardware acceleration
+- Avoid animating too many elements: Limit simultaneous hue animations to maintain smooth performance
+- Consider will-change property: Use`will-change: filter` for elements that will be animated
+
+## Practical Applications and Design Patterns
+
+### Dynamic Theme Switching
+
+Create adaptive color schemes by using hue-rotate to shift your entire interface:
+
+```
+/* Theme switching with hue-rotate */
+.theme-blue { filter: hue-rotate(0deg); }
+.theme-green { filter: hue-rotate(60deg); }
+.theme-purple { filter: hue-rotate(270deg); }
+.theme-red { filter: hue-rotate(330deg); }
+```
+
+### Hover Effects and Interactions
+
+Enhance user experience with subtle hue shifts on interaction:
+
+Hover Me
+
+Try This
+
+And This
+
+## Common Pitfalls and Troubleshooting
+
+### Understanding Color Behavior
+
+Remember that hue-rotate affects all colors, including:
+
+Important: Black, white, and pure grayscale colors (without hue information) remain unchanged by hue-rotate, as they have no hue component to shift.
+
+### Negative Values and Overflow
+
+Hue-rotate accepts negative values and values beyond 360 degrees:
+
+```
+/* These are equivalent */
+filter: hue-rotate(-90deg);
+filter: hue-rotate(270deg);
+
+/* These are also equivalent */
+filter: hue-rotate(450deg);
+filter: hue-rotate(90deg);
+```
+
+## Advanced Animation Techniques
+
+### Keyframe-Based Color Transitions
+
+Create sophisticated color animations with precise control:
+
+```
+@keyframes color-journey {
+    0% { filter: hue-rotate(0deg); }
+    25% { filter: hue-rotate(90deg); }
+    50% { filter: hue-rotate(180deg); }
+    75% { filter: hue-rotate(270deg); }
+    100% { filter: hue-rotate(360deg); }
+}
+
+.color-journey {
+    animation: color-journey 6s ease-in-out infinite;
+}
+```
+
+Smooth Color Journey Animation
+
+## Accessibility and Best Practices
+
+### Respecting User Preferences
+
+Always consider accessibility when using color animations:
+
+```
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .animated-hue {
+        animation: none;
+        filter: hue-rotate(0deg);
+    }
+}
+```
+
+### Maintaining Contrast Ratios
+
+Ensure text remains readable when applying hue-rotate to elements containing text. Test color combinations thoroughly to maintain WCAG compliance.
+
+## Conclusion
+
+The CSS hue-rotate filter opens up endless possibilities for creating dynamic, engaging visual experiences on the web. From subtle hover effects to dramatic color transformations, mastering this powerful tool will significantly enhance your web design capabilities. Remember to always test across different browsers, consider performance implications, and prioritize accessibility in your implementations.
+
+Start experimenting with hue-rotate in your next project and discover how this simple yet powerful filter can transform your web designs with stunning color effects that captivate your users.
+
+### Related Posts
+
+#### CSS Rotate: Complete Guide to Rotating Elements with Transform
+
+CSS rotation is one of the most powerful and visually striking transformation effects available to web developers. The transform: rotate()...
+
+#### CSS HSL Color Function: Complete Guide to Hue, Saturation, and Lightness
+
+The HSL color function in CSS provides an intuitive way to define colors using Hue, Saturation, and Lightness values. Unlike...
+
+#### CSS Saturate Filter: Complete Guide to Color Saturation Control
+
+The CSS saturate() filter function is a powerful tool that allows you to control the color saturation of HTML elements....
+
+#### CSS Grayscale Filter: Master Black and White Image Effects with Complete Guide
+
+The CSS grayscale filter is a powerful tool that transforms colorful images into elegant black and white versions. This filter...
+
+#### CSS Invert Filter: Complete Guide to Inverting Element Colors and Visual Effects
+
+The CSS invert() filter is a powerful visual effect that reverses the colors of HTML elements, creating striking contrast and...
+
+#### CSS Filter Property: Complete Guide to Visual Effects and Image Processing
+
+The CSS filter property is a powerful tool that allows developers to apply visual effects and image processing techniques directly...
+
+#### CSS Style transformOrigin Property: CSS Transform Origin
+
+CSS transformOrigin Property: Mastering Element Transformation Origins The transformOrigin property in CSS is a fundamental tool for controlling how transformations...
+
+#### CSS HSLA Color Function: Complete Guide to HSL with Alpha Transparency
+
+What is CSS HSLA Color Function? The HSLA color function in CSS is an extended version of the HSL color...
+
+#### CSS Color Values: Complete Guide to Named Colors, Hex, RGB, HSL, RGBA, HSLA
+
+Colors are fundamental to web design, breathin
+
+2. hue-rotate() | CSS-Tricks
+   https://css-tricks.com/almanac/functions/h/hue-rotate/
+   hue-rotate() | CSS-Tricks
+
+The`hue-rotate()` function rotates an element’s color and content by a specified hue on a color wheel. The hue is the shade or tint of a color, ranging from red through yellow, green, and blue.
+
+The`hue-rotate()` function is defined in the Filter Effects Module 1 specification.
+
+### How it works
+
+The function is accepted by the filter and backdrop-filter properties for applying visual effects to an element. In this case, we could rotate an element’s hue`160deg` from`magenta`:
+
+```css
+.element {
+  background-color: magenta;
+  filter: hue-rotate(160deg);
+}
+```
+
+CodePen Embed Fallback
+
+### Syntax
+
+```css
+hue-rotate() = hue-rotate( [ <angle> | <zero> ]? )
+```
+
+The` ` doesn’t have to be expressed in degrees. It can also be: turns (`turn`), radians (`rad`), gradians (`grad`), or simply zero (`0`) as a unit-less value.
+
+```css
+.degrees {
+  background: img("/images.png"); /* we can rotate a background image */
+  filter: hue-rotate(90deg);
+}
+
+.turns {
+  background-color: magenta;
+  filter: hue-rotate(0.25turn); /* same as 90deg */
+}
+
+.radians {
+  background-color: #ff0;
+  filter: hue-rotate(0.5rad); /* same as 90deg */
+}
+
+.gradians {
+  background-color: hsl(50deg 75% 50%);
+  filter: hue-rotate(180grad);
+}
+
+.zero {
+  background-color: oklch(0.7 0.1 152);
+  filter: hue-rotate(0);
+}
+```
+
+### About the “color wheel”
+
+We’re talking about a circle of colors that shifts hue from red to blue, and back to red, blending colors in between:
+
+CodePen Embed Fallback
+
+Since colors are placed around a circle, each color bleeds into another as the hue shifts from one color to the next. The`hue-rotate()` function takes the color of an image from its defined angle, rotates it by a given angle, and returns the new color at the new position.
+
+### It works with any kind of CSS color
+
+You might assume that the`hue-rotate()` function is only supported by HSL, OKLCH, and LCH colors — like`hsl(25deg 100% 50%)`— since those have “hue” directly in the name, but it supports any kind of CSS color.
+
+CodePen Embed Fallback
+
+### It accepts positive and negative values
+
+A negative value rates the hue in a counter-clockwise direction. For example,`-30deg` is like subtracting`30deg` from`360deg`, which is equal to`330deg`.
+
+CodePen Embed Fallback
+
+### Going beyond 360deg
+
+A circle can be rotated up to`360deg`. If we go beyond that, it simply rotates the circle further. For instance, an element rotated by`450deg` is the same as adding`90deg` to`360deg`, equaling`90deg`.
+
+CodePen Embed Fallback
+
+The same principle applies to other units. For example,`1.25turn` is equivalent to`.25turn`.
+
+### It rotates background and content colors
+
+It’s not just background colors that she can rotate! If your element has a`color` property set on it, then the text color will rotate as well.
+
+```css
+.hue-rotate {
+  background-color: blue;
+  color: lightgreen;;
+  filter: hue-rotate(60deg);
+}
+```
+
+CodePen Embed Fallback
+
+### It works on images and shadows, too!
+
+The`hue-rotate()` function can be used on any element to change its hue, even images. Unlike changing color, which only affects text or SVG fills,`hue-rotate()` affects the image, background, and shadow.
+
+Use the range slider to update the rotation angle in the following demo to see the background image colors change:
+
+CodePen Embed Fallback
+
+And a box shadow example:
+
+CodePen Embed Fallback
+
+### Example: Rotate icon colors
+
+We can also use`hue-rotate()`(along with some other filter functions) to change an image to any specific color, which comes in handy when working with icons. While icons are usually SVGs, meaning we can easily change their color directly from CSS, sometimes we are stuck with PNG icons. Luckily, even in those cases, we can use hue-rotate() to change the icons to any color.
+
+However, you may notice that`hue-rotate()` only affects, well, hue, and leaves brightness and saturation out of the equation, so we’ll have to use other filter functions too.
+
+We can rotate the color of an icon, say from black to a shade of light pink with the following`filter` property functions:
+
+```css
+.element {
+  filter:
+    invert(100%) 
+    sepia(100%) 
+    saturate(500%) 
+    hue-rotate(200deg);
+}
+```
+
+We’re using more than one filter function here, so let’s look at what each one does:
+
+- `invert(100%)`: Inverts the RGB values of each pixel in the icon. If it’s entirely black, it changes it to white, and vice versa. Since we’re starting with a black icon, inverting it to white gives us a bright base that can be pushed into an intense color with the next steps. Otherwise, black is always, well, black.
+- `sepia(100%)`: Applies a brownish, vintage tone to the image. Why? We need a non-grey, non-neutral color so hue and saturation operations have something to work with.
+- `saturation(500%)`: Multiplies the color’s saturation by 5. The sepia step gives us a nice warm color, but it might be too soft, so we use`saturation(500%)` to get an intense, vivid color.
+
+And, finally,`hue-rotate(200deg)` does what we’ve been looking at all along: rotate the present color by 200 degrees around the color wheel:
+
+CodePen Embed Fallback
+
+The following interactive demo lets you change colors and compare the before-and-after effects. Plus, it will give you a CSS snippet you can use in your own work:
+
+CodePen Embed Fallback
+
+### Specification
+
+The CSS`hue-rotate()` function is defined, among other filter functions, in the Filter Effects Module 1 specification, which is currently in Editor’s Draft.
+
+### Browser support
+
+`hue-rotate()` is currently supported on all browsers as of this writing.
+
+### Related resources
+
+- Color Shifting in CSS by Josh Comeau
+- Color Wheel by Figma
+- The Color Wheel for Artists: Understanding Its Importance and How to Use it in Your Arts by Chuck Black
+
+### Related tricks!
+
+Link on Oct 14, 2011
+
+### CSS Shaders
+
+Article on May 13, 2019
+
+### Change Color of SVG on Hover
+
+Article on May 25, 2015
+
+### Color Filters Can Turn Your Gray Skies Blue
+
+Article on Sep 22, 2022
+
+### How I Made an Icon System Out of CSS Custom Properties
+
+Article on Mar 30, 2018
+
+### Solved with CSS! Colorizing SVG Backgrounds
+
+Article on Aug 10, 2018
+
+### Switch font color for different backgrounds with CSS
+
+### Related
+
+Almanac on Aug 2, 2019
+
+### backdrop-filter
+
+.element { backdrop-filter: blur(10px); }
+
+Almanac on Feb 18, 2014
+
+### filter
+
+.element { filter: blur(3px); }
+
+Almanac on Jan 15, 2026
+
+### blur()
+
+.element { filter: blur(5px); }
+
+Almanac on Mar 4, 2026
+
+### brightness()
+
+.element { filter: brightness(1.5); }
+
+Almanac on Jan 13, 2026
+
+### drop-shadow()
+
+.element { filter: drop-shadow(#301934 20px 10px 4px); }
+
+Almanac on Mar 4, 2026
+
+### grayscale()
+
+.element { filter: grayscale(100%); }
+
+Almanac on Jan 27, 2026
+
+### hue-rotate()
+
+.element { filter: hue-rotate(160deg); }
+
+Almanac on Dec 11, 2025
+
+### invert()
+
+.element { filter: invert(0.8); }
+
+Almanac on Nov 18, 2025
+
+### opacity()
+
+.element { filter: opacity(50%); }
+
+Almanac on Aug 14, 2025
+
+### url()
+
+.element { background-image: url("https://example.com/image.png"); }
+
+This comment thread is closed. If you have important information to share, please contact us.
+
+3. Animating a Hue around the Color Wheel with Houdini
+   https://danielcwilson.com/blog/2019/09/huedini/
+   Animating a Hue around the Color Wheel with Houdini
+
+# Animating a Hue around the Color Wheel with Houdini
+
+Even though the`hsl()` color function allows us to specify hue, saturation, and lightness levels individually, there is no straightforward way to animate one value independently of the others. We will explore how color interpolation works on the web, look at our options to animate a hue around a color wheel, and see how Houdini gives us a mechanism to do this.
+
+### The basics of HSL
+
+The beauty of defining a color with`hsl()` is that you can start with a hue and then tweak it. If you want a reddish color you use a hue near`0`, or a cyan color is on the opposite side of the wheel at`180`(the values represent degrees in a circle, so the range of different values are from 0 to 360). The other two values are percentages from`0%` to`100%`. Saturation shows how full the color is at`100%` or grayed out more as you approach`0%`. Lightness at`0%` is always black,`100%` is always white, and`50%` is a good default for getting a bright color.
+
+See the Pen Visual Reference: Colors via HSL by Dan Wilson (@danwilson) on CodePen.
+
+### Color Interpolation
+
+Interpolation is effectively how the values between a start and end state are determined during an animation. Browsers are very efficient at determining the values between two numbers such as filling in an opacity animation from`0` to`1`.
+
+Determining what colors to show between two color states in an animation is actually also straightforward for a browser to accomplish, as colors boil down to a set of numbers.
+
+With RGB colors like`#ffaabb` and`rgb(255,170,187)` we have three sets of numbers that can be interpolated individually to determing a color value at each step in the animation. So if we want to move from a magenta (`rgb(255,0,255)`) to a cyan (`rgb(0,255,255)`) the R value will animate from 255 to 0, the G value will go from 0 to 255, while the B value stays at 255. This process is also how the inbetween values are determined for gradients.
+
+See the Pen Color Interpolation by Dan Wilson (@danwilson) on CodePen.
+
+Every step of this transition is still very much a blend of these two colors. With`hsl()` we get something a little more interesting where you can change a single value (the hue) and potentially get every color of the rainbow. Since we were able to interpolate each of the three RGB parts, you might think the three individual parts of the`hsl()` will interpolate on their own as well and we could actually rotate around the color wheel simply by animating from`hsl(0,100%,50%)` to`hsl(360,100%,50%)`.
+
+See the Pen Animating from red to red by Dan Wilson (@danwilson) on CodePen.
+
+This red block is technically animating, I promise. However, regardless how you define your color, CSS always animates between its computed values in RGB in the sRGB color space. So even though we used HSL in the previous example, it technically is doing an animation from`#ff0000` to`#ff0000`. You can edit the example to instead go from a hue of`0` to a hue of`180`(cyan) to see it doing the same animation you would find by going`red` to`cyan` or`#ff0000` to`#00ffff`.
+
+So whether you use named colors, RGB, HSL, or future methods like hwb(), the color stops are effectively converted to RGB and then have the interpolation applied.
+
+Is it possible to animate a hue change only?
+
+### CSS Filters and hue-rotate
+
+It is! Sort of!
+
+CSS Filters have been well supported for several years now across the board, including non-Chromified-Edge. Most people tend to lean on filters for the`blur()` function, but there are several other options including`hue-rotate()`.
+
+This will take the current hue of your color and rotate it around the color wheel the angle of degrees you specify. So let’s try our animation again with a starting`hsl(0,100%,50%)` and animate the hue to`360` via`hue-rotate(360deg)`.
+
+See the Pen Animating from red to red (hue-rotate) by Dan Wilson (@danwilson) on CodePen.
+
+We did it!*
+
+With an asterisk!
+
+My goal here was to keep the saturation and lightness consistent and then change only the hue from`0` to`360`. The hue was accurately rotated around a color wheel, but if you look closely at the color changes, we should see colors very similar to the perimeter of the circle in the first example of this article, where we can very clearly see each bright color from a rainbow — red, orange, yellow, green, blue, indigo, and violet. This animation clearly has a red, green, and blue, but everything in between is much darker and muddier than I’d expect.
+
+That is because`hue-rotate()` does not use the same color wheel as you get with`hsl()`(as Amelia Bellamy-Royds wonderfully explains in this blog comment). It gets complicated with color spaces and the fact that`hue-rotate` uses a combination of hue, saturation, and luminance instead of lightness.
+
+See the Pen What I Want out of hue-rotate by Dan Wilson (@danwilson) on CodePen.
+
+So this gets us a more interesting color animation, but it is not a rainbow animation at the same saturation and lightness. We can approximate a true hue rotation by using multiple keyframes with different colors. For example we get a little closer if we set an animation with three states of`hsl(0,100%,50%)`,`hsl(120,100%,50%)`,`hsl(240,100%,50%)`. We get even closer as we do five keyframes and ten keyframes. With 36 frames we get an approximation that is very close to the desired result.
+
+See the Pen HSL: Options to Rotate H with Same SL by Dan Wilson (@danwilson) on CodePen.
+
+### The Houdini Rotate
+
+If you are in a browser that supports the Houdini Properties and Values API specification, you will see an extra animation in the previous example (try a Blink browser with Experimental Web Platform Features flag enabled or the latest Safari Technology Preview). That gives us the actual behavior I desired as it accurately keeps the saturation and lightness in place and interpolates the hue value between`0` and`360`.
+
+As we can use Custom Properties to individualize the parts of a value, we can work with a base`hsl(var(--hue),100%,50%)` color and modify our`--hue` to go from`0` to`360`. Custom Properties themselves are not animatable out of the box, but Houdini allows the web author to provide a syntax for a specific custom property which tells it the rules to interpolate the property’s value.
+
+With the following CSS, we are changing the hue from`0` to`360`. The JavaScript is telling the browser to treat our custom property`--hue` as a number, and so it can follow the interpolation rules for numbers.
+
+```css
+div {  --hue: 0;  background: hsl(var(--hue), 100%, 50%);  animation: hue-rotate 10000ms infinite linear;}@keyframes hue-rotate {  100% {    --hue: 360  }}
+```
+
+```js
+if (window.CSS && CSS.registerProperty) {  CSS.registerProperty({    name: '--hue',    syntax: '<number>',    inherits: false,    initialValue: 0  });}
+```
+
+And with that we get a true hue rotation that maintains the same saturation and lightness found in our`hsl()` root color. We can similarly animate along saturation and lightness by setting up custom properties for each and registering the properties in JavaScript with the` ` syntax and an initial value that is a percentage, such as`100%`.
+
+See the Pen HSL Houdini by Dan Wilson (@danwilson) on CodePen.
+
+4. Color Animation in CSS: Transitions and Keyframes — ColorFYI
+   https://colorfyi.com/blog/color-animation-css/
+   Color Animation in CSS: Transitions and Keyframes — ColorFYI
+
+Table of Contents
+
+Color animation is one of the most expressive tools available to a web designer. A button that shifts hue on hover, a background that cycles through a gradient at dawn and dusk, a loading indicator whose color pulses with energy — these effects establish mood, communicate state, and add life to an interface without a single line of JavaScript. But CSS color animation has nuances that trip up even experienced developers: which properties animate, how the browser interpolates between colors, why some transitions look muddy in the middle, and how to use modern color spaces to get smooth, perceptually natural results.
+
+This guide covers CSS color transitions, keyframe animations, HSL-based hue rotation, OKLCH interpolation for perceptual smoothness, and performance considerations that keep animations buttery on every device.
+
+---
+
+## CSS Color Transitions
+
+The`transition` property tells the browser to animate smoothly from one value to another whenever a CSS property changes. Color properties —`color`,`background-color`,`border-color`,`outline-color`,`fill`,`stroke`, and others — are all animatable.
+
+### Basic Syntax
+
+```
+.button {
+  background-color: #3B82F6;
+  transition: background-color 200ms ease;
+}
+
+.button:hover {
+  background-color: #1D4ED8;
+}
+
+```
+
+When the cursor enters the button, the browser animates from#3B82F6(Tailwind blue-500) to#1D4ED8(Tailwind blue-700) over 200 milliseconds. When the cursor leaves, it animates back.
+
+The`transition` shorthand accepts:`property duration easing-function delay`. Multiple transitions can be comma-separated:
+
+```
+.card {
+  background-color: #F8FAFC;
+  border-color: #E2E8F0;
+  transition:
+    background-color 300ms ease,
+    border-color 300ms ease;
+}
+
+.card:hover {
+  background-color: #EFF6FF;
+  border-color: #BFDBFE;
+}
+
+```
+
+### Transition Timing Functions
+
+The easing function controls the rate of change during the animation:
+
+| Keyword | Behavior |
+| --- | --- |
+| `ease` | Slow start, fast middle, slow end (default) |
+| `ease-in` | Slow start, fast finish |
+| `ease-out` | Fast start, slow finish |
+| `ease-in-out` | Slow start and end, fast middle |
+| `linear` | Constant rate throughout |
+| `cubic-bezier(x1, y1, x2, y2)` | Custom curve |
+
+For color transitions,`ease-out` often feels most natural — the color quickly reaches its approximate target and then settles, which matches how physical color perception works.
+
+### Transitioning color and Multiple Properties
+
+You can use`all` to transition every animatable property, but this can cause unintended side effects if other properties change simultaneously. Being explicit is better practice:
+
+```
+.link {
+  color: #6366F1;
+  text-decoration-color: transparent;
+  transition:
+    color 150ms ease-out,
+    text-decoration-color 150ms ease-out;
+}
+
+.link:hover {
+  color: #4338CA;
+  text-decoration-color: #4338CA;
+}
+
+```
+
+---
+
+## Keyframe Color Animations
+
+The`@keyframes` rule defines a named animation sequence that can play continuously, repeat a set number of times, or run on a trigger. Unlike transitions, keyframes work without a state change — they can run automatically on page load or loop indefinitely.
+
+### Basic Keyframe Syntax
+
+```
+@keyframes pulse-blue {
+  0%   { background-color: #3B82F6; }
+  50%  { background-color: #60A5FA; }
+  100% { background-color: #3B82F6; }
+}
+
+.status-indicator {
+  animation: pulse-blue 2s ease-in-out infinite;
+}
+
+```
+
+This creates a pulsing status indicator that oscillates between#3B82F6(blue-500) and#60A5FA(blue-400), giving a subtle breathing effect.
+
+### Multiple Color Stops in Keyframes
+
+```
+@keyframes sunrise {
+  0%   { background-color: #0F172A; }   /* Deep night */
+  25%  { background-color: #7C3AED; }   /* Pre-dawn violet */
+  50%  { background-color: #F97316; }   /* Dawn orange */
+  75%  { background-color: #FDE68A; }   /* Morning yellow */
+  100% { background-color: #BFDBFE; }   /* Clear sky blue */
+}
+
+.hero-background {
+  animation: sunrise 8s ease-in-out forwards;
+}
+
+```
+
+### Animation Properties
+
+The`animation` shorthand accepts:`name duration timing-function delay iteration-count direction fill-mode play-state`
+
+```
+.element {
+  /* Name | Duration | Easing | Delay | Iterations | Direction */
+  animation: pulse-blue 2s ease-in-out 0s infinite alternate;
+}
+
+```
+
+The`alternate` direction makes the animation play forward then backward, creating a smooth loop without a hard jump at the end. This is ideal for color pulse effects.
+
+---
+
+## HSL-Based Animation for Smooth Hue Rotation
+
+HSL (Hue, Saturation, Lightness) makes hue rotation trivial because the hue is a single numeric value in degrees around the color wheel. Animating from hue 0 to hue 360 cycles through every color of the spectrum.
+
+### CSS Custom Properties for HSL Animation
+
+The most elegant approach uses CSS custom properties combined with`@keyframes`:
+
+```
+:root {
+  --hue: 220;
+}
+
+.rainbow-button {
+  background-color: hsl(var(--hue) 70% 55%);
+  transition: background-color 100ms linear;
+}
+
+@keyframes hue-rotate {
+  from { --hue: 0; }
+  to   { --hue: 360; }
+}
+
+.rainbow-button {
+  animation: hue-rotate 4s linear infinite;
+}
+
+```
+
+However, there is a catch: CSS cannot interpolate between custom property values by default because the browser does not know the property type. This is where`@property` comes in.
+
+### The @property Rule for Animated Custom Properties
+
+`@property` registers a custom property with a specific type, enabling the browser to interpolate it smoothly:
+
+```
+@property --hue {
+  syntax: "<number>";
+  initial-value: 0;
+  inherits: false;
+}
+
+@keyframes hue-rotate {
+  from { --hue: 0; }
+  to   { --hue: 360; }
+}
+
+.rainbow-text {
+  color: hsl(var(--hue) 80% 45%);
+  animation: hue-rotate 6s linear infinite;
+}
+
+```
+
+With`@property` declaring`--hue` as a` `, the browser interpolates smoothly between 0 and 360, cycling through the full hue wheel.
+
+### Partial Hue Rotation for Themed Effects
+
+You do not need a full 360-degree rotation to create interesting effects. Animating within a narrower hue range creates a more restrained, on-brand feel:
+
+```
+@property --hue {
+  syntax: "<number>";
+  initial-value: 210;
+  inherits: false;
+}
+
+@keyframes ocean-shift {
+  0%   { --hue: 195; }   /* Cyan */
+  50%  { --hue: 230; }   /* Blue */
+  100% { --hue: 195; }   /* Back to cyan */
+}
+
+.ocean-card {
+  background-color: hsl(var(--hue) 60% 45%);
+  animation: ocean-shift 5s ease-in-out infinite;
+}
+
+```
+
+This shifts between a cyan comparable to #00BFCE and a medium blue comparable to #4166CC, creating a fluid ocean-tidal effect without ever leaving the blue-cyan family.
+
+### Lightness and Saturation Animation
+
+Beyond hue, you can animate saturation and lightness to create pulsing, fading, or energizing effects:
+
+```
+@property --lightness {
+  syntax: "<percentage>";
+  initial-value: 55%;
+  inherits: false;
+}
+
+@keyframes pulse-light {
+  0%, 100% { --lightness: 45%; }
+  50%       { --lightness: 65%; }
+}
+
+.pulse {
+  background-color: hsl(220 70% var(--lightness));
+  animation: pulse-light 2s ease-in-out infinite;
+}
+
+```
+
+This creates a gentle brightness pulse in a blue hue, ideal for notification badges or attention-drawing elements.
+
+---
+
+## OKLCH Interpolation for Perceptual Smoothness
+
+HSL-based animation is convenient, but it has a well-known problem: the midpoints of transitions between certain hues look visually unpleasant — passing through muddy, desaturated gray zones, or through intermediate hues the designer did not intend.
+
+This happens because HSL and sRGB are not perceptually uniform. Equal numeric steps do not produce equal perceived steps. The interpolation path between two HSL colors passes through intermediate colors that are not perceptually halfway between the endpoints.
+
+OKLCH (OK Lightness-Chroma-Hue) solves this. It is designed so that equal numeric steps produce equal perceived steps. Transitions between OKLCH colors produce smooth, vibrant midpoints without unexpected gray
+
+5. Color Shifting in CSS | Engineered.at
+   https://engineered.at/articles/color-shifting-in-css
+   Color Shifting in CSS | Engineered.at
+
+## AI Summary
+
+The article explains how to implement convincing per-element color shifting in CSS for effects like particles, and why naive hue animations can produce visually wrong “gray” midpoints. Engineers should care because it highlights subtle browser color-interpolation behaviors, along with practical workarounds that also improve animation performance.
+
+### Key Takeaways
+
+- CSS Color Interpolation Uses RGB Internally: when animating background-color with HSL-defined endpoints, the browser interpolates via RGB, causing saturation/lightness to drift and producing a washed-out/gray midpoint.
+- Hue-Range Wrap Requires Strategy: transitions between hsl(0deg) and hsl(360deg) can result in no visible change because both resolve to identical RGB values, so hue-wrap isn’t guaranteed by simply changing the angle.
+- Filter Hue-Rotate Enables True Hue Spinning: using`filter: hue-rotate(…)`(e.g., 720deg) achieves continuous, multi-rotation hue shifts and is described as more performant since it can reuse prior paints and avoid full repaint of background-color each frame.
+- Typed CSS Custom Properties Allow Direct Angle Animation:`@property --hue { syntax: ' '; … }` lets the browser animate a hue angle variable and recompute HSL per frame, avoiding the RGB-interpolation limitation without using filters (though the article notes it’s less ideal than the filter approach).
+
+Share

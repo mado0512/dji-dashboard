@@ -1,0 +1,1966 @@
+query: best practice SvelteKit real world production project GitHub 2024 structure
+
+answer:
+  For a production-ready SvelteKit project, best practice structures emphasize modularity, type safety, and automated quality gates [1][2]. Common conventions include organizing domain-specific logic and server-only code within `src/lib/server/` [3][4][5].
+
+Modern production templates typically adopt one of two patterns:
+
+Feature-based: Use Feature-Sliced Design (FSD) where layers like `entities`, `features`, and `widgets` reside under `src/lib/` to enforce strict dependency boundaries [6].
+
+Module-based: A standard layout separates concerns into `src/lib/components`, `src/lib/server` (for DB and auth), `src/lib/utils`, and `src/routes/` groups (e.g., `(auth)`, `(app)`) to handle authentication states [5][7].
+
+Key integrations include:
+- CI/CD pipelines (GitHub Actions) for linting, type-checking, and testing [1][2].
+- Pre-commit/pre-push hooks using Husky to run Playwright E2E and unit tests [1][5][2].
+- Centralized configuration for environment variables, UI components, and database schemas [3][8][4].
+
+sources (8):
+
+1. Agustin-Perezz/sveltekit-production-starter
+   https://github.com/Agustin-Perezz/sveltekit-production-starter
+   # Repository: Agustin-Perezz/sveltekit-production-starter (from template [Agustin-Perezz/svelte-template](https://github.com/Agustin-Perezz/svelte-template))
+
+Production-ready SvelteKit 5 + Tailwind v4 starter with E2E testing, coverage, and Sentry monitoring
+
+- Stars: 0
+- Forks: 1
+- Watchers: 0
+- Open issues: 0
+- Primary language: Svelte
+- Languages: Svelte (45.4%), TypeScript (36.4%), CSS (9.6%), JavaScript (7.1%), HTML (1.2%), Shell (0.3%)
+- Topics: ci-cd, clean-architecture, svelte, ts
+- Default branch: main
+- Created: 2026-01-09T12:22:42Z
+- Last push: 2026-03-10T14:22:43Z
+- Contributors: 1 (top: Agustin-Perezz)
+
+---
+
+# Svelte Raw Template
+
+A production-ready SvelteKit starter template built with shift-left quality practices. Catch bugs early, ship with confidence.
+
+## Philosophy
+
+This template embraces the **shift-left** methodology—integrating quality gates at every stage of development rather than catching issues in production. Every commit is linted, every push is tested, and every merge is validated through CI/CD.
+
+**Fail fast, fix early.**
+
+## Project Structure
+
+```
+├── 📁 .claude
+│   ├── 📁 rules
+│   │   ├── 📝 coding-conventions.md
+│   │   ├── 📝 svelte-standards.md
+│   │   └── 📝 typescript-standards.md
+│   ├── 📁 skills
+│   │   └── 📁 plan-feature
+│   │       └── 📝 SKILL.md
+│   └── ⚙️ settings.json
+├── 📁 .github
+│   └── 📁 workflows
+│       └── ⚙️ main.yml
+├── 📁 .husky
+│   ├── 📄 pre-commit
+│   └── 📄 pre-push
+├── 📁 e2e
+├── 📁 src
+│   ├── 📁 lib
+│   │   ├── 📁 alerts
+│   │   │   └── 📄 toast.ts
+│   │   ├── 📁 components
+│   │   │   └── 📁 ui
+│   │   │       ├── 📁 button
+│   │   │       ├── 📁 card
+│   │   │       ├── 📁 form-field
+│   │   │       ├── 📁 input
+│   │   │       ├── 📁 label
+│   │   │       └── 📁 pagination
+│   │   ├── 📁 data
+│   │   ├── 📁 server
+│   │   │   └── 📄 auth.ts
+│   │   ├── 📄 axios.ts
+│   │   ├── 📄 env.ts
+│   │   └── 📄 utils.ts
+│   ├── 📁 routes
+│   │   ├── 📁 pokemons
+│   │   │   ├── 📁 components
+│   │   │   │   ├── 📄 PokemonCard.svelte
+│   │   │   │   ├── 📄 PokemonEmptyState.svelte
+│   │   │   │   ├── 📄 PokemonGrid.svelte
+│   │   │   │   └── 📄 PokemonSearchBar.svelte
+│   │   │   ├── 📁 types
+│   │   │   │   └── 📄 pokemon.ts
+│   │   │   ├── 📄 +page.server.ts
+│   │   │   ├── 📄 +page.svelte
+│   │   │   └── 📄 pokemonsPage.svelte.ts
+│   │   ├── 📁 protected
+│   │   │   ├── 📄 +page.server.ts
+│   │   │   └── 📄 +page.svelte
+│   │   ├── 📄 +layout.js
+│   │   ├── 📄 +layout.svelte
+│   │   └── 📄 +page.svelte
+│   ├── 🎨 app.css
+│   ├── 📄 app.d.ts
+│   ├── 🌐 app.html
+│   ├── 📄 hooks.client.ts
+│   └── 📄 hooks.server.ts
+├── 📁 static
+│   └── 🖼️ favicon.svg
+├── ⚙️ .editorconfig
+├── ⚙️ .env.dist
+├── ⚙️ .gitignore
+├── ⚙️ .npmrc
+├── ⚙️ .prettierignore
+├── ⚙️ .prettierrc
+├── 📝 CLAUDE.md
+├── 📝 README.md
+├── ⚙️ components.json
+├── 📄 eslint.config.js
+├── ⚙️ package.json
+├── 📄 playwright.config.ts
+├── 📄 playwright.monocart-reporter.ts
+├── ⚙️ pnpm-lock.yaml
+├── 📄 svelte.config.js
+├── ⚙️ tsconfig.json
+└── 📄 vite.config.ts
+```
+
+## AI-Assisted Development (`.claude/`)
+
+This project includes a `.claude/` configuration folder that enables **engineering-grade AI assistance** via [Claude Code](https://docs.anthropic.com/en/docs/claude-code). It encodes the project's coding standards, architectural patterns, and workflows so the AI follows the same rules a senior engineer would.
+
+### What It Provides
+
+- **Scoped rules** — Coding conventions activate only on relevant file types (e.g., Svelte standards apply to `*.svelte` files, TypeScript standards to `*.ts` files), so the AI always follows the right patterns in the right context.
+- **Custom skills** — Reusable prompts for common workflows (e.g., `plan-feature` generates an engineering checklist before writing code).
+- **Post-edit hooks** — Automated ESLint runs after every file edit, catching issues immediately.
+- **Project instructions (`CLAUDE.md`)** — A top-level file that gives the AI full context on the architecture, libraries, and quality pipeline.
+
+### `.claude/` Structure
+
+```
+.claude/
+  rules/
+    coding-conventions.md   # Brace style, no inline returns
+    svelte-standards.md     # Svelte 5 Runes, SvelteKit patterns, SOLID
+    typescript-standards.md # satisfies, type guards, strict rules
+  skills/
+    plan-feature/
+      SKILL.md              # Engineering checklist workflow
+  settings.json             # Post-edit hooks, tool permissions
+```
+
+### How to Use
+
+1. Install [Claude Code](https://docs.anthropic.com/en/docs/claude-code)
+2. Open the project — Claude Code automatically reads `CLAUDE.md` and `.claude/`
+3. Ask it to build features, fix bugs, or refactor — it will follow the project's standards
+
+## Quality Gates
+
+```mermaid
+flowchart LR
+    Code --> PreCommit["Pre-commit: lint-staged"]
+    PreCommit --> PrePush["Pre-push: E2E tests + Coverage"]
+    PrePush --> CI["CI Pipeline"]
+    CI --> Sentry["Sentry Monitoring"]
+    CI --> Deploy
+```
+
+| Stage | Trigger | Actions |
+| --- | --- | --- |
+| Pre-commit | `git commit` | Prettier + ESLint on staged files |
+| Pre-push | `git push` | Full Playwright E2E test suite with coverage |
+| CI/CD | Push/PR to main | Lint, type-check, test, build |
+| Runtime | Production | Sentry error tracking & performance monitoring |
+
+## Technologies
+
+**Core**
+
+- SvelteKit
+- TypeScript
+- Vite
+
+**Styling**
+
+- Tailwind CSS v4
+- Bits UI
+- Tailwind Merge & Variants
+
+**Quality**
+
+- ESLint & Prettier
+- Playwright (E2E)
+- Monocart Reporter (V8 Code Coverage)
+- Husky (Git hooks)
+- lint-staged
+
+**Observability**
+
+- Sentry (Error tracking & Performance monitoring)
+
+**Validation**
+
+- Zod
+- Superforms
+
+**HTTP**
+
+- Axios
+
+## Getting Started
+
+Install dependencies:
+
+```bash
+pnpm install
+```
+
+Start the development server:
+
+```bash
+pnpm dev
+```
+
+Build for production:
+
+```bash
+pnpm build
+```
+
+Preview the production build:
+
+```bash
+pnpm preview
+```
+
+## Commands
+
+| Command | Description |
+| --- | --- |
+| `pnpm dev` | Start development server |
+| `pnpm build` | Build for production |
+| `pnpm preview` | Preview production build |
+| `pnpm check` | Run type checks |
+| `pnpm lint` | Lint and check formatting |
+| `pnpm format` | Format code with Prettier |
+| `pnpm test` | Run E2E tests |
+| `pnpm test:show-report` | Open Monocart test report |
+| `pnpm coverage:show-report` | Open V8 coverage report |
+
+## Code Coverage
+
+E2E tests collect V8 code coverage using Playwright's built-in coverage API and Monocart Reporter.
+
+**Report Formats**
+
+- V8 HTML Report: `./coverage/e2e/v8/index.html`
+- LCOV: `./coverage/e2e/lcov/code-coverage.lcov.info`
+- Cobertura XML: `./coverage/e2e/cobertura/code-coverage.cobertura.xml`
+
+## Environment Variables
+
+Create a `.env` file with the following variables:
+
+```
+VITE_API_BASE_URL=your-base-api
+VITE_SENTRY_DSN=your-sentry-dsn
+SENTRY_DSN=your-sentry-dsn
+SENTRY_ORG=your-sentry-org
+SENTRY_PROJECT=your-sentry-project
+SENTRY_AUTH_TOKEN=your-sentry-auth-token
+```
+
+## CI/CD Pipeline
+
+GitHub Actions workflow triggers on push and pull requests to main:
+
+1. Install dependencies (pnpm)
+2. Run linter and formatter checks
+3. Run TypeScript type checks
+4. Install Playwright browsers
+5. Execute E2E test suite
+6. Build the application
+
+2. kizivat/saas-kit
+   https://github.com/kizivat/saas-kit
+   # Repository: kizivat/saas-kit
+
+Free SaaS template built with SvelteKit, Supabase, and shadcn-svelte.
+
+- Stars: 125
+- Forks: 23
+- Watchers: 125
+- Open issues: 1
+- Primary language: Svelte
+- Languages: Svelte (64.3%), TypeScript (28.3%), CSS (3.9%), JavaScript (1.9%), PLpgSQL (1.5%), HTML (0.2%)
+- License: Other (NOASSERTION)
+- Topics: saas-boilerplate, shadcn-ui, supabase, sveltekit
+- Default branch: main
+- Homepage: https://saaskit.live
+- Created: 2024-05-17T07:29:07Z
+- Last push: 2025-04-21T00:47:36Z
+- Contributors: 10 (top: scosman, kizivat, owenversteeg, dependabot[bot], keybits, CharlBest, kar-re, charlbest-toast, MaxBroome, mgenovski)
+
+---
+
+ 
+
+# SaaS Kit
+
+[![Build](https://github.com/kizivat/saas-kit/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/kizivat/saas-kit/actions/workflows/build.yml)
+[![Format Check](https://github.com/kizivat/saas-kit/actions/workflows/format.yml/badge.svg?branch=main)](https://github.com/kizivat/saas-kit/actions/workflows/format.yml)
+[![Linting](https://github.com/kizivat/saas-kit/actions/workflows/linting.yml/badge.svg?branch=main)](https://github.com/kizivat/saas-kit/actions/workflows/linting.yml)
+[![License](https://img.shields.io/badge/License-MIT-brightgreen?labelColor=32383f)](https://github.com/kizivat/saas-kit/blob/main/LICENSE)
+
+### SaaS Kit is an open-source, fast, and free to host SaaS template / boilerplate
+
+- [Feature Rich](#features): user auth, user dashboard, marketing site, billing/subscriptions, pricing page, and more.
+- [Delighful Developer Experience](#tech-stack): tools you'll love working with, including SvelteKit, Tailwind, shadcn-svelte, Postgres, and Supabase.
+- Extensible: all the tools you need to make additional marketing pages, UI components, user dashboards, admin portals, database backends, API endpoints, and more.
+- [Hosting](#suggested-hosting-stack): Our suggested hosting stack is free to host, cheap to scale, easy to manage.
+- [MIT Open Source](https://github.com/kizivat/saas-kit/blob/main/LICENSE)
+- [Quick Start](#quick-start): Full docs from `git clone` to deployment.
+
+> Based on [CriticalMoments/CMSaasStarter](https://github.com/CriticalMoments/CMSaasStarter) by the folks at [Critical Moments](https://criticalmoments.io)!
+> 
+> **Make mobile apps?** Improve conversion rates and ratings with [Critical Moments](https://criticalmoments.io).
+> 
+> _(I'm not affiliated with Critical Moments, but I love their work and wanted to make it easier for others to use their template.)_
+
+## Features
+
+Everything you need to get started for a SaaS company:
+
+- User Authentication: Sign up, sign out, forgot password, email verification, oAuth and account deletion. Powered by Supabase Auth.
+- Marketing Page with SEO optimization
+- User Dashboard with user profile, user settings, update email/password, billing, and more.
+- Subscriptions powered by Stripe Checkout
+- Pricing page
+- Contact-us form
+- Billing portal: self serve to change card, upgrade, cancel, or download receipts
+- Style toolkit: theming and UI components
+- Responsive: designed for mobile and desktop.
+- Extensible: all the tools you need to make additional marketing pages, UI components, admin portals, database backends, API endpoints, and more.
+
+## Tech Stack
+
+- Web Framework: SvelteKit
+- CSS / Styling
+
+- Framework: TailwindCSS
+ - Component library: shadcn-svelte
+
+- Suggested Hosting Stack
+
+- Host + CDN: Cloudflare Pages
+ - Serverless compute: Cloudflare Workers
+ - Authentication: Supabase Auth
+ - Database: Supabase Postgres
+
+- Payments
+
+- Stripe Checkout
+ - Stripe Portal
+
+## Suggested Hosting Stack
+
+**There’s no cost for using this template**. The costs below reflect our suggested hosting stack.
+
+- **$0/mo** — Supabase free tier, Cloudflare free tier.
+
+- Pros:
+ - Free!
+ - Can scale to thousands of users.
+ - Unlimited static page requests.
+ - 100k serverless functions/day.
+ - Cons:
+ - Does not include database backups. The frugal among you could hook up pgdump backups on lambda/S3 for a few cents per month.
+ - Will auto-pause your database when not in use for 7 days.
+ - Who it’s for:
+ - This tier is perfectly functional for a hobby project, or pre-revenue company (up to 50,000 monthly active users). It’s easy to scale up once revenue starts, but it’s also fine to keep at this scale indefinitely.
+
+- **$30/mo** - Supabase Pro, Cloudfare [Workers Paid](https://www.cloudflare.com/plans/developer-platform/)
+
+- Pros:
+ - Database backups.
+ - Never pauses database.
+ - Over 1M serverless functions per day, with linear pricing for additional invocations.
+ - Cons:
+ - none
+ - Who it’s for:
+ - I suggest moving to this once you have paid customers or investors.
+
+## Performance / Best Practices
+
+The selected tech stack creates lightning fast websites.
+
+- Instant navigation: the best of CSR + SSR in one. SSR your first page for fastest possible initial load times. For subsequent pages, the content is pre-loaded and rendered with CSR, for instant rendering.
+- CDN optimized, for high edge-cache hit ratios
+- Svelte and Tailwind compile out unused HTML, CSS and JS at deploy time for smaller pages
+- Linting to find accessibility and syntax issues
+
+# Quick Start
+
+### Get Started (Local Development)
+
+This repo is a template, so you can click the green "Use this template" button on Github to create your own repo with this code. Then clone your repo locally and follow these steps:
+
+```sh
+## First fork the project on Github
+git clone <your-repo-from-this-template>
+cd <your-repo-dir> ## or your fork name if different
+npm install
+## Create an env file. You'll replace the values in this in later steps.
+cp .env.example .env.local
+## Run the project locally in dev mode, and launch the browser
+npm run dev -- --open
+```
+
+### Developer Environment
+
+The repo includes [CI scripts](https://aws.amazon.com/devops/continuous-integration/) designed for [GitHub Actions](https://github.com/features/actions). These confirm you don’t break your [build](https://github.com/kizivat/saas-kit/blob/main/.github/workflows/build.yml), you use [proper code formatting](https://github.com/kizivat/saas-kit/blob/main/.github/workflows/format.yml), and [code linting and typechecking passes](https://github.com/kizivat/saas-kit/blob/main/.github/workflows/linting.yml).
+
+You can manually run these scripts yourself; `npm run build` for the build, `npm run format:check` to check formatting, `npm run lint` for the linting, `npm run check` for typechecking, and `npm run test` for testing (if you add tests).
+
+If you're using VSCode, go to the extensions tab and install the recommended extensions. Those should be:
+
+- Svelte for Svelte and accessibility issues: [VSCode](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode) or [other editors](https://sveltesociety.dev/tools#editor-support)
+- ESLint for type checking and linting: [VSCode](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [other editors](https://eslint.org/docs/latest/use/integrations)
+- Vitest for testing if you add tests: [VSCode](https://marketplace.visualstudio.com/items?itemName=vitest.explorer) or [other editors](https://vitest.dev/guide/ide)
+
+To catch build, formatting, linting and test issues before you commit changes, we suggest the following local git hook. It will run before you commit, stop you from breaking the build, and show any issues that are found. Add the lines below to an executable git hook script at the location `.git/hooks/pre-commit`.
+
+```
+#!/bin/sh
+set -e
+npm run format:check
+npm run lint
+npm run build
+npm run check
+npm run test
+```
+
+Finally: if you find build, formatting or linting rules too tedious, you can disable enforcement by deleting the CI files (`.github/workflows/*`) and remove the git hook (`.git/hooks/pre-commit`).
+
+### Setup Supabase
+
+#### Local Development
+
+This repo is ready to run locally with [Supabase CLI](https://supabase.com/docs/guides/cli). Supabase CLI is installed locally after running `npm install` above.
+
+Having [Dock
+
+3. vsamarth/sveltestack
+   https://github.com/vsamarth/sveltestack
+   # vsamarth/sveltestack
+
+A reasonable foundation for ambitious Svelte apps.
+
+- Stars: 86
+- Forks: 7
+- Watchers: 86
+- Open issues: 0
+- License: MIT License
+- Homepage: https://sveltestack-one.vercel.app
+- Default branch: main
+- Created: 2025-11-22T01:15:09Z
+
+## Languages
+
+- CSS
+- HTML
+- JavaScript
+- Shell
+- Svelte
+- TypeScript
+
+## Topics
+
+- svelte
+- web
+
+## Top Contributors
+
+- vsamarth (137 contributions)
+- al-dubois (4 contributions)
+
+---
+
+## README
+
+# SvelteStack
+
+ 
+
+[![Build and Test](https://github.com/vsamarth/sveltestack/actions/workflows/ci.yml/badge.svg)](https://github.com/vsamarth/sveltestack/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/vsamarth/sveltestack/branch/main/graph/badge.svg)](https://codecov.io/gh/vsamarth/sveltestack)
+
+**A reasonable foundation for ambitious Svelte apps.**
+
+Production-ready building blocks for authentication, workspaces, members, roles, activity logs, and more.
+
+ 
+
+ 
+ 
+ 
+
+---
+
+## ✨ Overview
+
+SvelteStack is an open-source, production-ready starter kit for building modern full-stack applications with **SvelteKit** and **Svelte 5**. It provides the essential building blocks that every real product eventually needs—not a bloated template, just solid, production-ready primitives.
+
+### What's Included
+
+SvelteStack comes with **Vault**, a fully-functional demo application showcasing file storage and workspace management. Use it as a starting point for your own application, extend it with new features, or study it as a learning resource.
+
+## 🚀 Features
+
+### Core Building Blocks
+
+- 🔐 **Authentication** - Secure email/password auth with [better-auth](https://www.better-auth.com/), Argon2 password hashing, and session management
+- 🗄️ **Database Integration** - PostgreSQL with [Drizzle ORM](https://orm.drizzle.team/), type-safe queries, migrations, and seeding
+- 👥 **Workspaces & Organizations** - Create, organize, and manage workspaces with multi-tenant isolation
+- 📧 **Members & Invites** - Email-based team invitations with member management and role-based access
+- 📝 **Activity Logs** - Comprehensive activity tracking and monitoring
+- 📨 **Transactional Emails** - Email verification, password resets, and workspace invites with [Resend](https://resend.com/)
+- ☁️ **File Storage** - S3-compatible storage with presigned URLs and [Uppy](https://uppy.io/) integration
+- 🎨 **Modern UI Kit** - Pre-configured [Tailwind CSS](https://tailwindcss.com/) with [shadcn-svelte](https://www.shadcn-svelte.com/) components
+- ✅ **Testing Setup** - Comprehensive test coverage with [Vitest](https://vitest.dev/) and [Playwright](https://playwright.dev/)
+
+### Vault Demo Features
+
+The included **Vault** application demonstrates:
+
+- **File Management**
+ - Drag-and-drop file uploads
+ - Direct S3 upload with presigned URLs
+ - Progress tracking and error handling
+ - File previews and metadata
+ - Workspace-aware file organization
+
+- **Workspace Management**
+ - Create and organize multiple workspaces
+ - Rename and manage workspace settings
+ - Multi-tenant workspace isolation
+ - Access control and permissions
+
+- **Team Collaboration**
+ - Invite team members via email
+ - Manage workspace members
+ - Cancel pending invitations
+ - Member removal capabilities
+
+## 🛠️ Tech Stack
+
+- **[SvelteKit](https://kit.svelte.dev/)** - Full-stack framework with Svelte 5
+- **[Drizzle ORM](https://orm.drizzle.team/)** - Type-safe SQL queries
+- **[PostgreSQL](https://www.postgresql.org/)** - Robust relational database
+- **[better-auth](https://www.better-auth.com/)** - Modern authentication library
+- **[Resend](https://resend.com/)** - Transactional email service
+- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
+- **[shadcn-svelte](https://www.shadcn-svelte.com/)** - Beautiful UI components
+- **[Vitest](https://vitest.dev/)** - Fast unit testing framework
+- **[Playwright](https://playwright.dev/)** - End-to-end testing
+
+## 📋 Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- **[Bun](https://bun.sh/)** >= 1.0 (recommended package manager)
+- **Node.js** >= 20 (required for some tooling)
+- **[Docker](https://www.docker.com/)** with Docker Compose (for local database)
+
+## 🏁 Getting Started
+
+### Quick Start
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/vsamarth/sveltestack.git
+   cd sveltestack
+   ```
+
+2. **Run the setup script**
+
+   ```bash
+   bash scripts/setup.sh
+   ```
+
+ The setup script will:
+ - ✅ Check all prerequisites (Node.js, Bun, Docker)
+ - 📦 Install dependencies
+ - 🔐 Create `.env` file with generated secrets
+ - 🗄️ Start the PostgreSQL database
+ - 🔄 Run database migrations
+ - 🌱 Optionally seed sample data
+
+3. **Start the development server**
+
+   ```bash
+   bun dev
+   ```
+
+4. **Open your browser**
+
+ Visit [http://localhost:5173](http://localhost:5173) to see your app.
+
+## 🏗️ Building Your Own App
+
+Here are the key areas you can customize:
+
+- **Branding** - Replace Vault branding with your own in `src/lib/config.ts`
+- **Database Schemas** - Modify schemas in `src/lib/server/db/schema/`
+- **UI Components** - Update components in `src/lib/components/`
+- **API Routes** - Add your own routes in `src/routes/`
+- **Email Templates** - Customize emails in `src/lib/emails/`
+
+## 🧪 Testing
+
+We want to ensure the foundations you build upon are always working. That's why SvelteStack ships with comprehensive integration and end-to-end tests. You can run them with:
+
+```bash
+# Run all tests
+bun run test
+
+# Run unit tests only
+bun run test:unit
+
+# Run E2E tests only
+bun run test:e2e
+
+# Run tests with coverage
+bun run test:coverage
+
+# Watch mode
+bun run test:watch
+```
+
+## Deployment
+
+We recommend deploying to [Vercel](https://vercel.com/) for hosting and [Neon](https://neon.tech/) for PostgreSQL. [Cloudflare R2](https://www.cloudflare.com/products/r2/) provides free S3-compatible storage for your file uploads.
+
+More detailed instructions on how to set everything up are coming soon.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+SvelteStack is built with amazing open-source tools:
+
+- [SvelteKit](https://kit.svelte.dev/) - The web framework
+- [shadcn-svelte](https://www.shadcn-svelte.com/) - Beautiful UI components
+- [better-auth](https://www.better-auth.com/) - Authentication library
+- [Drizzle ORM](https://orm.drizzle.team/) - Type-safe ORM
+- [Resend](https://resend.com/) - Email service
+- [Uppy](https://uppy.io/) - File upload library
+- [Vitest](https://vitest.dev/) - Testing framework
+- [Playwright](https://playwright.dev/) - E2E testing
+
+
+4. grether-io/sveltekit-supabase-starter
+   https://github.com/grether-io/sveltekit-supabase-starter
+   # grether-io/sveltekit-supabase-starter
+
+This repo can be used as a starter to create new Apps with SvelteKit and Supabase.
+
+- Stars: 1
+- Forks: 0
+- Watchers: 1
+- Open issues: 0
+- Default branch: main
+- Created: 2026-01-12T15:14:48Z
+
+## Languages
+
+- CSS
+- HTML
+- JavaScript
+- PLpgSQL
+- Svelte
+- TypeScript
+
+## Topics
+
+- auth
+- formsnap
+- lucide-svelte
+- shadcn-svelte
+- starter
+- supabase
+- superforms
+- svelte
+- sveltekit
+- tailwindcss
+- template
+
+## Top Contributors
+
+- grether-io (59 contributions)
+
+---
+
+## README
+
+# SvelteKit Supabase Starter
+
+A modern, full-featured SvelteKit starter template with Supabase integration, authentication, and a comprehensive set of reusable UI components inspired by shadcn/ui.
+
+---
+
+## Table of Contents
+- [Features](#features)
+- [Authentication](#authentication)
+- [Role-Based Access Control (RBAC)](#role-based-access-control-rbac)
+- [Admin Panel](#admin-panel)
+- [Project Structure](#project-structure)
+- [Setup & Installation](#setup--installation)
+- [Running Supabase Locally](#running-supabase-locally)
+- [Environment Variables](#environment-variables)
+- [Development](#development)
+- [Building & Deployment](#building--deployment)
+- [UI Components](#ui-components)
+- [Modules & Libraries](#modules--libraries)
+- [Testing & Linting](#testing--linting)
+- [Additional Resources](#additional-resources)
+
+---
+
+## Features
+- **SvelteKit 5** with TypeScript, Vite, and Tailwind CSS 4
+- **Supabase Integration**: Authentication (email/password, 2FA), database, and storage
+- **Role-Based Access Control (RBAC)**: 6-tier role hierarchy (Guest → Contributor → Author → Editor → Admin → SuperAdmin)
+- **Admin Panel**: User management, role assignment, and comprehensive audit logging
+- **Authentication Flows**: Login, signup, password reset, email verification, and 2FA setup
+- **Theme Support**: Dark mode toggle with persistent preferences (mode-watcher)
+- **Sidebar Navigation**: Responsive app sidebar with role-based menu items
+- **Form Management**: Zod schema validation with sveltekit-superforms and formsnap
+- **UI Component Library**: 19+ accessible, themeable components (shadcn/ui style)
+- **Toast Notifications**: Beautiful toast messages (svelte-sonner)
+- **Production-Ready**: Vercel adapter with environment-based configuration
+
+---
+
+## Authentication
+
+This starter provides a complete authentication system powered by Supabase, with ready-to-use pages and flows for all common authentication scenarios.
+
+### Authentication Flows
+
+#### Email/Password Authentication
+- **Sign Up** (`/signup`): Create new account with email, password, first name, and last name
+- **Login** (`/login`): Sign in with email and password
+- **Email Verification** (`/verify-email`): Verify email address after signup
+- **Forgot Password** (`/forgot-password`): Request password reset link
+- **Reset Password** (`/reset-password`): Set new password using reset token
+
+#### Two-Factor Authentication (2FA)
+- **2FA Setup** (`/settings`): Enable TOTP-based 2FA with QR code
+- **2FA Login** (`/login/2fa`): Verify 6-digit code during login
+- **Disable 2FA** (`/settings`): Turn off two-factor authentication
+
+### Protecting Authenticated Routes
+
+Routes inside the `(authenticated)` folder automatically require login. The layout checks for an active session:
+
+```typescript
+// src/routes/(authenticated)/+layout.server.ts
+export const load: LayoutServerLoad = async ({ locals: { safeGetSession } }) => {
+  const { session, user } = await safeGetSession();
+  
+  if (!session) {
+    redirect(303, '/login'); // Redirect to login if not authenticated
+  }
+  
+  return { user };
+};
+```
+
+### Authentication Hook
+
+The `hooks.server.ts` file sets up Supabase authentication and injects user data into `event.locals`:
+
+```typescript
+// Supabase client creation and session management
+export const handle = sequence(
+  createSupabaseServerClient,  // Creates Supabase client
+  authorizationHook             // Extracts user role from JWT
+);
+```
+
+This makes `locals.safeGetSession()` and `locals.userRole` available in all server-side code.
+
+### Session Management
+
+- **Server-Side**: Use `event.locals.safeGetSession()` to get user and session
+- **Client-Side**: Use the Supabase client from `$lib/supabase.ts`
+- **Automatic Refresh**: Sessions automatically refresh on the client and server
+- **JWT Claims**: User roles stored in JWT for efficient access control
+
+### Files
+
+- **`src/hooks.server.ts`**: Global authentication and authorization hooks
+- **`src/lib/supabase.ts`**: Client-side Supabase client factory
+- **`src/lib/server/supabase.ts`**: Server-side Supabase client creation
+- **`src/lib/schemas/auth.ts`**: Zod validation schemas for all auth forms
+- **`src/routes/login/`, `/signup/`, etc.**: Authentication page implementations
+
+---
+
+## Role-Based Access Control (RBAC)
+
+This starter includes a complete role-based access control system with a 6-tier hierarchy. Each role has a numeric level that determines permissions, with higher numbers granting more access.
+
+### Role Hierarchy
+
+| Role | Level | Description |
+|------|-------|-------------|
+| **Guest** | 10 | Basic access - default role for new users |
+| **Contributor** | 30 | Can contribute content |
+| **Author** | 50 | Can create and manage own content |
+| **Editor** | 70 | Can edit others' content |
+| **Admin** | 90 | Full administrative access to user management and settings |
+| **SuperAdmin** | 100 | Complete system access with all privileges |
+
+### Protecting Routes
+
+Routes can be protected at different levels depending on your needs.
+
+#### Layout-Level Protection (Entire Section)
+
+Protect all routes within a section using `+layout.server.ts`:
+
+```typescript
+// src/routes/(authenticated)/admin/+layout.server.ts
+import { requireRole, ROLE_LEVELS } from '$lib/server/auth-guard';
+import type { RequestEvent } from '@sveltejs/kit';
+
+export const load = async (event: RequestEvent) => {
+  // Require admin role (level 90) to access all /admin routes
+  requireRole(event.locals, ROLE_LEVELS.ADMIN);
+  
+  return {};
+};
+```
+
+#### Page-Level Protection (Single Route)
+
+Protect a specific page using `+page.server.ts`:
+
+```typescript
+// src/routes/(authenticated)/dashboard/+page.server.ts
+import { requireRole, ROLE_LEVELS } from '$lib/server/auth-guard';
+
+export const load = async ({ locals }) => {
+  // Require at least Author role to access this page
+  requireRole(locals, ROLE_LEVELS.AUTHOR);
+  
+  // Load page data...
+  return { data: '...' };
+};
+```
+
+#### Conditional Role Checks
+
+For more complex logic, use the `hasRole` helper:
+
+```typescript
+export const load = async ({ locals }) => {
+  const isAdmin = locals.hasRole(ROLE_LEVELS.ADMIN);
+  const isEditor = locals.hasRole(ROLE_LEVELS.EDITOR);
+  
+  return {
+    canEdit: isEditor || isAdmin,
+    canDelete: isAdmin,
+    userRole: locals.userRole
+  };
+};
+```
+
+#### Client-Side Role Display
+
+Access user role in components for UI customization:
+
+```svelte
+<script lang="ts">
+  import { ROLE_LEVELS } from '$lib/constants/roles';
+  
+  let { data } = $props();
+  
+  const isAdmin = data.userRole?.level >= ROLE_LEVELS.ADMIN;
+</script>
+
+{#if isAdmin}
+  <button>Admin Controls</button>
+{/if}
+```
+
+**Note**: If a user lacks sufficient permissions, `requireRole` redirects them to `/dashboard`.
+
+### Files
+
+- **`src/lib/constants/roles.ts`**: Role definitions, levels, and display utilities
+- **`src/lib/server/auth-guard.ts`**: Server-side role validation
+- **`src/lib/schemas/roles.ts`**: Zod schemas for role operations
+- **`src/lib/server/roles.ts`**: Database operations for role management
+
+### Test Users
+
+When running Supabase locally with seed data:
+
+- **Admin**: `admin@test.com` / `password` (SuperAdmin role)
+- **Guest**: `guest@test.com` / `password` (Guest role)
+
+---
+
+## Admin Panel
+
+The admin section (`/admin`) provides comprehensive tools for managing users and monitoring system activity. Access requires **Admin** role (level 90) or higher.
+
+### User Management (`/admin/users`)
+
+- **View All Users**: See complete user list with 
+
+5. nirvagold/svelteship
+   https://github.com/nirvagold/svelteship
+   # nirvagold/svelteship
+
+- Stars: 0
+- Forks: 0
+- Watchers: 0
+- Open issues: 0
+- License: MIT License
+- Default branch: main
+- Created: 2025-12-29T23:57:42Z
+
+## Languages
+
+- CSS
+- HTML
+- JavaScript
+- Svelte
+- TypeScript
+
+## Top Contributors
+
+- nirvagold (64 contributions)
+- septianff73 (3 contributions)
+
+---
+
+## README
+
+# 🚀 Svelteship
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![SvelteKit](https://img.shields.io/badge/SvelteKit-2.x-FF3E00?logo=svelte)](https://kit.svelte.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.x-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?logo=postgresql)](https://www.postgresql.org/)
+
+**Production-ready SvelteKit boilerplate** with authentication, database, UI components, and advanced features. Ship modern web applications quickly and securely.
+
+[Preview](https://nirvagold.github.io/svelteship/preview/) · [Documentation](#documentation) · [Report Bug](https://github.com/nirvagold/svelteship/issues) · [Request Feature](https://github.com/nirvagold/svelteship/issues)
+
+---
+
+## 📋 Table of Contents
+
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Quick Start](#-quick-start)
+- [Project Structure](#-project-structure)
+- [Documentation](#-documentation)
+- [Environment Variables](#-environment-variables)
+- [Database](#-database)
+- [Authentication](#-authentication)
+- [UI Components](#-ui-components)
+- [Advanced Features](#-advanced-features)
+- [Testing](#-testing)
+- [Deployment](#-deployment)
+- [Contributing](#-contributing)
+- [License](#-license)
+
+---
+
+## ✨ Features
+
+### Authentication & Security
+- 🔐 **Complete Auth System** - Register, login, logout with session management
+- � **OAuth Integration** - Google and GitHub social login
+- �️ *P*Secure Sessions** - HTTP-only cookies with secure flags
+- 🔒 **Password Hashing** - Argon2 algorithm for maximum security
+- 🚪 **Protected Routes** - Automatic redirect for unauthenticated users
+- � **Email rVerification** - Verify user emails with tokens
+- � **Passwlord Reset** - Secure password recovery flow
+
+### Database & ORM
+- 🗄️ **PostgreSQL** - Robust relational database
+- 📊 **Drizzle ORM** - Type-safe SQL query builder
+- 🔄 **Migrations** - Version-controlled database schema
+- 🐳 **Docker Setup** - One-command local database
+
+### UI & Styling
+- 🎨 **Tailwind CSS 4** - Utility-first CSS framework
+- 🌸 **DaisyUI** - Beautiful component library (32+ themes)
+- 🌓 **Theme Selector** - Full theme support with persistence
+- � **Responsive** - Mobile-first design
+- 🧩 **Layout Components** - Sidebar, Topbar, Centered, Split layouts
+- 📝 **Form Components** - Input, Select, Checkbox, Radio, Textarea, DatePicker, FileInput
+
+### Advanced Features (v0.5.0)
+- 🌐 **Internationalization (i18n)** - Multi-language support (EN, ID)
+- 📧 **Email Service** - Resend integration with HTML templates
+- 📁 **File Storage** - Local, S3, and Cloudflare R2 support
+- 📡 **Real-time SSE** - Server-Sent Events for notifications
+- 📊 **Analytics** - Plausible, Umami, Google Analytics support
+- 📝 **Structured Logging** - JSON logging with Sentry integration
+- 📚 **API Documentation** - Interactive API docs page
+- 🛠️ **CLI Generator** - Generate components, routes, and APIs
+
+### Developer Experience
+- 📝 **TypeScript** - Full type safety
+- ⚡ **Vite** - Lightning-fast HMR
+- 🧪 **Testing** - Unit, property-based, and E2E tests (476+ tests)
+- 📦 **Pre-built Components** - 16+ UI components ready to use
+
+---
+
+## �️ Tecch Stack
+
+| Category | Technology |
+|----------|------------|
+| **Framework** | [SvelteKit 2](https://kit.svelte.dev/) with [Svelte 5](https://svelte.dev/) |
+| **Language** | [TypeScript 5](https://www.typescriptlang.org/) |
+| **Styling** | [Tailwind CSS 4](https://tailwindcss.com/) + [DaisyUI 5](https://daisyui.com/) |
+| **Database** | [PostgreSQL 16](https://www.postgresql.org/) |
+| **ORM** | [Drizzle ORM](https://orm.drizzle.team/) |
+| **Authentication** | [Lucia Auth 3](https://lucia-auth.com/) |
+| **Email** | [Resend](https://resend.com/) |
+| **Storage** | Local / AWS S3 / Cloudflare R2 |
+| **Testing** | [Vitest](https://vitest.dev/) + [Playwright](https://playwright.dev/) + [fast-check](https://fast-check.dev/) |
+| **Container** | [Docker](https://www.docker.com/) |
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- [Node.js 18+](https://nodejs.org/)
+- [Docker](https://www.docker.com/) (for PostgreSQL)
+- [Git](https://git-scm.com/)
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/nirvagold/svelteship.git
+cd svelteship
+
+# Install dependencies
+npm install
+
+# Copy environment variables
+cp .env.example .env
+
+# Start PostgreSQL with Docker
+docker-compose up -d
+
+# Run database migrations
+npm run db:migrate
+
+# Start development server
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+---
+
+## 📁 Project Structure
+
+```
+svelteship/
+├── src/
+│   ├── lib/
+│   │   ├── components/
+│   │   │   ├── ui/           # UI primitives (Button, Modal, Toast, etc.)
+│   │   │   ├── forms/        # Form components (Input, Select, etc.)
+│   │   │   └── layouts/      # Layout components (Sidebar, Topbar, etc.)
+│   │   ├── hooks/            # Svelte hooks (useDebounce, useForm, useSSE, etc.)
+│   │   ├── utils/            # Shared utilities (date, currency, etc.)
+│   │   ├── i18n/             # Internationalization (locales, translations)
+│   │   ├── analytics/        # Analytics integration
+│   │   └── server/           # Server-only code
+│   │       ├── db/           # Database client & schema
+│   │       ├── email/        # Email service & templates
+│   │       ├── storage/      # File storage (local, S3, R2)
+│   │       ├── oauth/        # OAuth providers (Google, GitHub)
+│   │       ├── logger.ts     # Structured logging
+│   │       ├── sse.ts        # Server-Sent Events
+│   │       └── auth.ts       # Lucia configuration
+│   ├── routes/
+│   │   ├── (auth)/           # Auth pages (login, register, logout, oauth)
+│   │   ├── (app)/            # Protected pages (dashboard, profile, settings)
+│   │   ├── api/              # API endpoints
+│   │   │   ├── docs/         # Interactive API documentation
+│   │   │   └── notifications/# SSE notification stream
+│   │   ├── docs/             # Component documentation
+│   │   └── +page.svelte      # Landing page
+│   ├── examples/             # Optional features (copy if needed)
+│   │   ├── notifications/    # Notification system
+│   │   ├── onboarding/       # Onboarding wizard
+│   │   ├── admin/            # Admin dashboard
+│   │   ├── sessions/         # Session management
+│   │   └── security/         # Password change, 2FA
+│   └── hooks.server.ts       # Session validation middleware
+├── scripts/
+│   └── generate.ts           # CLI generator for components/routes/APIs
+├── drizzle/                  # Database migrations
+├── e2e/                      # Playwright E2E tests
+├── static/                   # Static assets
+└── docker-compose.yml        # PostgreSQL container
+```
+
+---
+
+## 📖 Documentation
+
+### Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run preview` | Preview production build |
+| `npm run check` | Run svelte-check |
+| `npm run test` | Run unit tests |
+| `npm run test:e2e` | Run E2E tests |
+| `npm run lint` | Run ESLint |
+| `npm run db:generate` | Generate migrations |
+| `npm run db:migrate` | Run migrations |
+| `npm run db:studio` | Open Drizzle Studio |
+| `npm run generate` | CLI generator for components/routes/APIs |
+
+---
+
+## 🔧 Environment Variables
+
+Create a `.env` file in the root directory. See [.env.example](.env.example) for all available options:
+
+```env
+# Database
+DATABASE_URL=postgres://svelteship:sveltesh
+
+6. geodask/sveltekit-shadcn-fsd-template
+   https://github.com/geodask/sveltekit-shadcn-fsd-template
+   # geodask/sveltekit-shadcn-fsd-template
+
+SvelteKit template with shadcn-svelte and FSD pattern for scalable, modern projects.
+
+- Stars: 0
+- Forks: 0
+- Watchers: 0
+- Open issues: 0
+- License: MIT License
+- Default branch: master
+- Created: 2025-04-05T11:24:46Z
+
+## Languages
+
+- CSS
+- HTML
+- JavaScript
+- Svelte
+- TypeScript
+
+## Top Contributors
+
+- geodask (5 contributions)
+
+---
+
+## README
+
+# SvelteKit Shadcn FSD Template
+
+[![SvelteKit](https://img.shields.io/badge/SvelteKit-FF3E00?style=for-the-badge&logo=svelte&logoColor=white)](https://kit.svelte.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Shadcn-Svelte](https://img.shields.io/badge/Shadcn_Svelte-000000?style=for-the-badge&logo=shadcnui&logoColor=FF3E00)](https://www.shadcn-svelte.com/)
+[![FSD](https://img.shields.io/badge/Feature_Sliced_Design-FF1E2D?style=for-the-badge&logo=slice&logoColor=white)](https://feature-sliced.github.io/documentation/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+
+A template for quickly bootstrapping SvelteKit projects with Shadcn UI components and Feature-Sliced Design (FSD) architecture.
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Project Structure](#project-structure)
+- [Dependency Diagram](#dependency-diagram)
+- [Getting Started](#getting-started)
+- [Adding New FSD Slices](#adding-new-fsd-slices)
+- [Shadcn UI for Svelte](#shadcn-ui-for-svelte)
+- [Feature-Sliced Design (FSD)](#feature-sliced-design-fsd)
+ - [Layer Dependencies](#layer-dependencies)
+ - [FSD Layers in this Template](#fsd-layers-in-this-template)
+- [SvelteKit Integration](#sveltekit-integration)
+- [Configuration](#configuration)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Overview
+
+This template provides a pre-configured SvelteKit project that combines:
+- SvelteKit as the framework
+- Shadcn UI components for Svelte
+- Feature-Sliced Design (FSD) architecture for project structure
+
+## Project Structure
+
+The project follows a modified Feature-Sliced Design architecture with layers organized under `src/lib`:
+
+```
+src/
+├── lib/
+│   ├── entities/           # Business entities (users, products, etc.)
+│   ├── features/           # User interactions and business logic
+│   ├── pages/              # Page components
+│   ├── shared/             # Shared utilities, UI components, and APIs
+│   │   ├── lib/            # Utility functions and hooks
+│   │   │   └── shadcn.ts   # Shadcn utilities
+│   │   └── ui/             # Shadcn UI components and custom reusable components with no business logic
+│   └── widgets/            # Complex UI blocks composed of entities and features
+├── routes/                 # SvelteKit routes (maps to FSD "app" layer)
+└── app.css                 # Global styles
+```
+
+## Dependency Diagram
+
+```
+┌────────────┐
+│   routes   │ (SvelteKit routes - FSD "app" layer)
+└─────┬──────┘
+      │
+      ▼
+┌────────────┐
+│   pages    │ Page components
+└─────┬──────┘
+      │
+      ▼
+┌────────────┐
+│  widgets   │ Complex UI blocks
+└─────┬──────┘
+      │
+      ▼
+┌────────────┐
+│  features  │ User interactions and business logic
+└─────┬──────┘
+      │
+      ▼
+┌────────────┐
+│  entities  │ Business entities
+└─────┬──────┘
+      │
+      ▼
+┌────────────┐
+│   shared   │ Reusable utilities and components
+└────────────┘
+```
+
+Each layer can import from any layer below it, but only through the public API (index.ts).
+
+## Getting Started
+
+1. Clone this repository
+   ```bash
+   git clone https://github.com/yourusername/sveltekit-shadcn-fsd-template.git my-project
+   cd my-project
+   ```
+
+2. Install dependencies with `pnpm install`
+3. Run the development server with `pnpm dev`
+4. Build for production with `pnpm build`
+
+## Adding New FSD Slices
+
+Here's a quick example of how to add a new slice following the FSD structure:
+
+### Example: Adding Authentication Functionality
+
+1. **Create the feature slice structure**:
+   ```
+   src/lib/features/auth/
+   ├── ui/
+   │   ├── login-form.svelte
+   │   └── register-form.svelte
+   ├── model/
+   │   └── types.ts
+   ├── api/
+   │   └── api.ts
+   └── index.ts
+   ```
+
+2. **Create public API in index.ts**:
+   ```typescript
+   // src/lib/features/auth/index.ts
+   export { default as LoginForm } from './ui/login-form.svelte';
+   export { default as RegisterForm } from './ui/register-form.svelte';
+   export type { LoginData, RegisterData } from './model/types';
+   ```
+
+3. **Use in a page slice**:
+   ```svelte
+   <!-- src/lib/pages/login/ui/page.svelte -->
+   <script>
+     import { LoginForm } from '$lib/features/auth';
+   </script>
+
+   <div class="container">
+     <h1>Login</h1>
+     <LoginForm />
+   </div>
+   ```
+
+## Shadcn UI for Svelte
+
+The template uses [Shadcn UI for Svelte](https://www.shadcn-svelte.com/), a collection of beautifully designed, accessible UI components built with Tailwind CSS. These components are not a component library, but rather a collection of reusable components you can copy and paste into your projects.
+
+Shadcn configuration:
+- **Style**: "New York" theme
+- **Base Color**: Neutral
+- **Components location**: `$lib/shared/ui/`
+- **Utilities location**: `$lib/shared/lib/shadcn.ts`
+
+> **Note:** This template uses `shadcn-svelte@next` with Tailwind CSS v3. It will be updated when the stable version of shadcn-svelte is released.
+
+## Feature-Sliced Design (FSD)
+
+[Feature-Sliced Design](https://feature-sliced.github.io/documentation/) is a methodology for organizing code in frontend applications. This template implements FSD with a slight adaptation to work well with SvelteKit.
+
+### Layer Dependencies
+
+The project follows strict layer boundaries:
+
+- Each layer can only import from layers below it
+- Layers must only use the public API (index.ts) from layers below, never reference their internal structure
+- Segments within the same layer cannot import from each other
+- The dependency flow follows: `pages -> widgets -> features -> entities -> shared`
+
+Example of correct imports:
+```ts
+// ✅ Correct: Using public API
+import { UserCard } from '$lib/entities/user';
+
+// ❌ Wrong: Using internal structure
+import { UserCard } from '$lib/entities/user/ui/user-card';
+
+// ❌ Wrong: Cross-segment import within same layer
+import { AdminCard } from '$lib/entities/admin'; // from user/index.ts inside $lib/entities/user
+```
+
+For more detailed information about FSD principles and guidelines, refer to the [official documentation](https://feature-sliced.github.io/documentation/docs/reference).
+
+### FSD Layers in this Template
+
+- **app**: Maps to `routes` folder - application initialization, routing, and global providers
+- **pages**: Page components
+- **widgets**: Complex UI blocks composed of features and entities
+- **features**: User interactions and business logic
+- **entities**: Business logic related to domain entities
+- **shared**: Reusable components, utilities, and APIs
+
+## SvelteKit Integration
+
+This template integrates FSD with SvelteKit in the following ways:
+
+- The FSD "app" layer maps to SvelteKit's `routes` directory
+- Page components in `$lib/pages` are imported and used in SvelteKit routes
+- SvelteKit layouts (`+layout.svelte`) handle global layouts and data loading
+- Page-specific layouts can be created in the `routes` directory
+
+Example:
+```svelte
+<!-- src/routes/dashboard/+page.svelte -->
+<script>
+  import { DashboardPage } from '$lib/pages/dashboard';
+</script>
+
+<DashboardPage />
+```
+
+## Configuration
+
+The template includes:
+
+- TypeScript support
+- Shadcn UI configuration
+- ESLint and Prettier configuration
+- Alias paths for easy imports between FSD layers
+
+## Contributing
+
+This is primarily a personal template that reflects my development workflow. However, contributions and suggestions are welcome if you'd like to he
+
+7. LukasParke/Sveltey
+   https://github.com/LukasParke/Sveltey
+   # LukasParke/Sveltey
+
+A modern, production-ready SaaS template built with SvelteKit 2, Svelte 5, Supabase, and Skeleton UI. Get your SaaS project up and running in hours, not months.
+
+- Stars: 14
+- Forks: 3
+- Watchers: 14
+- Open issues: 10
+- Homepage: https://www.sveltey.dev
+- Default branch: main
+- Created: 2025-05-24T21:24:56Z
+
+## Languages
+
+- CSS
+- HTML
+- JavaScript
+- Svelte
+- TypeScript
+
+## Topics
+
+- saas
+- svelte
+- sveltekit
+- template
+
+## Top Contributors
+
+- LukasParke (55 contributions)
+- google-labs-jules[bot] (2 contributions)
+
+---
+
+## README
+
+ 
+ 
+ 
+ 
+ 
+ 
+
+# 🚀 Sveltey - a SaaS Template built with SvelteKit
+
+![Sveltey SaaS Template](https://github.com/user-attachments/assets/5dc91129-ebc7-4458-98b6-1862c6de4428)
+
+A modern, production-ready SaaS template built with [SvelteKit 2](https://kit.svelte.dev/), [Svelte 5](https://svelte.dev/), [Supabase](https://supabase.com/), and [Skeleton UI](https://skeleton.dev/). Get your SaaS project up and running in hours, not months.
+
+- [🚀 Sveltey - a SaaS Template built with SvelteKit](#-sveltey---a-saas-template-built-with-sveltekit)
+ - [✨ Features](#-features)
+ - [🔐 Authentication \& User Management](#-authentication--user-management)
+ - [🎨 Modern UI/UX](#-modern-uiux)
+ - [📝 Content Management](#-content-management)
+ - [📊 Dashboard \& Analytics - Planned](#-dashboard--analytics---planned)
+ - [💳 Payments \& Subscriptions - Planned](#-payments--subscriptions---planned)
+ - [🚀 Quick Start](#-quick-start)
+ - [📦 Tech Stack](#-tech-stack)
+ - [📁 Project Structure](#-project-structure)
+ - [🔧 Configuration](#-configuration)
+ - [Environment Variables](#environment-variables)
+ - [Supabase Setup](#supabase-setup)
+ - [Email Setup (Resend)](#email-setup-resend)
+ - [Email Features](#email-features)
+ - [Example Usage](#example-usage)
+ - [Email Template example](#email-template-example)
+ - [Stripe Setup](#stripe-setup)
+ - [Analytics Setup (Plausible)](#analytics-setup-plausible)
+ - [Current Configuration](#current-configuration)
+ - [Customizing for Your Domain](#customizing-for-your-domain)
+ - [Analytics Features](#analytics-features)
+ - [Custom Events (Optional)](#custom-events-optional)
+ - [Alternative Analytics](#alternative-analytics)
+ - [🎯 Customization](#-customization)
+ - [Branding](#branding)
+ - [Components](#components)
+ - [🔍 SEO \& Meta Tags](#-seo--meta-tags)
+ - [Understanding the Meta Tag System](#understanding-the-meta-tag-system)
+ - [Base Meta Tags Structure](#base-meta-tags-structure)
+ - [Customizing Page Meta Tags](#customizing-page-meta-tags)
+ - [Dynamic Meta Tags](#dynamic-meta-tags)
+ - [Robot Control](#robot-control)
+ - [🖼️ OpenGraph Images](#️-opengraph-images)
+ - [Setting Up OpenGraph Images](#setting-up-opengraph-images)
+ - [1. Default Site Image](#1-default-site-image)
+ - [2. Page-Specific Images](#2-page-specific-images)
+ - [3. Dynamic Images for Blog Posts](#3-dynamic-images-for-blog-posts)
+ - [OpenGraph Image Best Practices](#opengraph-image-best-practices)
+ - [Image Specifications](#image-specifications)
+ - [Design Guidelines](#design-guidelines)
+ - [Dynamic Image Generation](#dynamic-image-generation)
+ - [Testing OpenGraph Images](#testing-opengraph-images)
+ - [Common OpenGraph Properties](#common-opengraph-properties)
+ - [🤝 Contributing](#-contributing)
+ - [📄 License](#-license)
+ - [🆘 Support](#-support)
+ - [🙏 Acknowledgments](#-acknowledgments)
+
+## ✨ Features
+
+### 🔐 Authentication & User Management
+- **Supabase Auth Integration**: Complete authentication flow with email/password and OAuth providers
+- **Protected Routes**: Automatic route protection and session management
+- **User Profiles**: Customizable user profile management
+- **Password Reset**: Secure password reset functionality
+
+### 🎨 Modern UI/UX
+- **Skeleton UI**: Beautiful, accessible components out of the box
+- **Dark/Light Mode**: Built-in mode switching
+- **Comprehensive Themes**: 22 beautiful handmade themes
+- **Responsive Design**: Mobile-first, responsive layouts
+- **Loading States**: Elegant loading indicators and transitions
+- **Toast Notifications**: User-friendly feedback system
+
+### 📝 Content Management
+- **Blog System**: Built-in blog with markdown support
+- **SEO Optimized**: Meta tags, Open Graph, and structured data
+
+### 📊 Dashboard & Analytics - Planned
+- **Admin Dashboard**: Clean, intuitive admin interface
+- **User Analytics**: Basic user metrics and insights
+- **Real-time Updates**: Live data updates using Supabase real-time
+- **Data Visualization**: Charts and graphs for key metrics
+- **Privacy-First Analytics**: Built-in Plausible Analytics integration for GDPR-compliant tracking
+
+### 💳 Payments & Subscriptions - Planned
+- **Stripe Integration**: Ready-to-use payment processing
+- **Subscription Plans**: Flexible pricing tiers
+- **Billing Management**: Customer billing portal
+- **Webhook Handling**: Secure webhook processing
+
+## 🚀 Quick Start
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/sveltey.git
+cd sveltey
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your Supabase and Stripe keys
+
+# Start the development server
+npm run dev
+```
+
+Visit `http://localhost:5173` and start building your SaaS!
+
+## 📦 Tech Stack
+
+- **Framework**: SvelteKit 2 with Svelte 5
+- **Database**: Supabase (PostgreSQL)
+- **Authentication**: Supabase Auth
+- **UI Components**: Skeleton UI
+- **Styling**: Tailwind CSS
+- **Analytics**: Plausible Analytics
+- **Email**: Resend
+ 
+- **Deployment**: Vercel/Netlify ready
+- **Language**: TypeScript
+
+## 📁 Project Structure
+
+```
+src/
+├── lib/
+│   ├── components/     # Reusable UI components
+│   ├── stores/         # Svelte stores for state management
+│   ├── utils/          # Utility functions
+│   └── types/          # TypeScript type definitions
+├── routes/
+│   ├── (app)/          # App routes
+|   |   ├── api         # API routes, security is handled at the endpoint level
+|   |   ├── app         # App routes, security is handeled globally, all sub-routes are protected
+|   |   └── auth        # Auth routes, used for login, logout, and password reset functionality
+│   └── (marketing)/    # Public marketing pages
+|       ├── blog        # API routes, security is handled at the endpoint level
+|       ├── contact     # Contact page
+|       ├── pricing     # Pricing page
+|       ├── privacy     # Privacy policy page
+|       └── terms       # Terms of service page
+├── app.html            # App shell
+├── app.css             # Global styles
+└── hooks.server.ts     # Server hooks
+```
+
+## 🔧 Configuration
+
+### Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+# Supabase
+PUBLIC_SUPABASE_URL=your_supabase_url
+PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# Resend (for email)
+RESEND_API_KEY=your_resend_api_key
+
+# Stripe // coming soon
+PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
+STRIPE_SECRET_KEY=your_stripe_secret_key
+STRIPE_WEBHOOK_SECRET=your_webhook_secret
+
+```
+
+### Supabase Setup
+
+1. Create a new Supabase project
+2. Copy the project URL and anon key
+3. Run the included SQL migrations
+4. Set up your authentication providers
+
+### Email Setup (Resend)
+
+Sveltey uses [Resend](https://resend.com/) for reliable email delivery with excellent developer experience.
+
+1. **Create a Resend account** at [resend.com](https://resend.com/)
+2. **Get your API key** from the Resend dashboard
+3. **Add to environment variables**:
+   ```env
+   RESEND_API_KEY=re_your_api_key_here
+   ```
+4. **Verify your domain** (optional but recommended for production):
+ - Add your domain in the Resend dashboard
+ - Configure DNS records as instructed
+ - This removes the "via resend.com" branding and improves deliverability
+
+#### Email Features
+
+- **Transactional Emails**: Password resets, welcome emails, notifications
+- **Template Support**: Beautiful HTML email templates
+- **Delivery Tracking**: Monitor email delivery and engagement
+- **High Deliverability**: Excellent inbox placement rates
+- **Simp
+
+8. templates/sveltekit-shadcn-v5 at main · GantonL/templates · GitHub
+   https://github.com/GantonL/templates/tree/main/sveltekit-shadcn-v5
+   templates/sveltekit-shadcn-v5 at main · GantonL/templates · GitHub
+
+## Files
+
+main
+
+# sveltekit-shadcn-v5
+
+main
+
+# sveltekit-shadcn-v5
+
+Top
+
+Last commit message
+
+Last commit date
+
+View all files
+
+## README.md
+
+# SvelteKit + shadcn-svelte Template
+
+Modern full-stack web application template built with SvelteKit v5, shadcn-svelte, TypeScript, and PostgreSQL.
+
+## Tech Stack
+
+- SvelteKit v5 - Full-stack framework with file-based routing
+- shadcn-svelte - Customizable UI components built on bits-ui
+- Tailwind CSS v4 - Utility-first styling with Vite plugin
+- TypeScript - Full type safety throughout
+- better-auth - Modern authentication with OAuth & email/password support
+- Drizzle ORM - Type-safe SQL database toolkit
+- PostgreSQL - Production-ready relational database
+- Vitest - Fast unit testing with browser testing support
+- Playwright - End-to-end testing framework
+- Docker - Containerized database for local development
+
+## Features
+
+### Core Features
+
+- Authentication System - Complete auth with better-auth, OAuth (Google), and email/password
+- Application Shell - Responsive layout with header, footer, and sidebar navigation
+- Theme System - Dark/light mode with system preference detection and persistence
+- Internationalization - Multi-language support with RTL/LTR layouts, provided with English & Hebrew
+- Cookie Management - GDPR-compliant cookie preferences and consent system
+- SEO Optimized - Meta tags, structured data, sitemap generation, and robots.txt
+- Policy Pages - Pre-configured Terms, Privacy, Cookies, and Accessibility policies
+- Configuration-Driven - Centralized configurations for maintainable code architecture
+
+### Database & Backend
+
+- Authentication Layer - better-auth integration with secure session management and OAuth
+- Database Abstraction Layer - Generic service pattern with CRUD operations
+- Service Factory - Singleton pattern for service management with caching
+- Query Utilities - URL and body parameter parsing for filtering, pagination, and sorting
+- Docker Integration - Local and test database environments
+
+### Developer Experience
+
+- Comprehensive Testing - Unit tests for all database services
+- Type Safety - Full TypeScript coverage including database schemas
+- CLI Tools - Automated scaffolding for pages, markdown files, and API controllers
+- mdsvex Integration - Markdown processing with Svelte components
+- Cloudflare Ready - Optimized for Cloudflare deployment
+
+## Pages & Routes
+
+- Home (`/`) - Landing page with feature overview and health status
+- Authentication (`/signin`,`/signup`) - Complete auth flow with OAuth and email/password
+- Example (`/example`) - Scrollable content demonstration
+- Health (`/health`) - System health dashboard with database status
+- Error Pages - Custom error boundaries and 404 handling
+- Cookie Manager - User preferences for cookie consent
+- Policy Suite - Complete legal page templates (Terms, Privacy, Accessibility)
+
+## Development
+
+### Quick Start
+
+install Bun & Docker on your local machine.
+
+```
+# Install dependencies
+bun install
+
+# Make sure Docker deamon is running
+
+# Start local database
+bun run local:db:up
+
+# Migrate to create the demo table
+bun run db:migrate
+
+# Start development server
+bun run dev
+
+# Stop local database when done
+bun run local:db:down
+```
+
+### Database Operations
+
+```
+# Local Development Database
+bun run local:db:up        # Start PostgreSQL container
+bun run local:db:down      # Stop PostgreSQL container
+bun run db:migrate         # Run database migrations
+
+# Test Database
+bun run test:db:up         # Start test PostgreSQL container
+bun run test:db:down       # Stop test PostgreSQL container
+bun run test:server        # Run server-side tests with test DB
+```
+
+### Build & Test
+
+```
+# Build for production
+bun run build
+
+# Type checking
+bun run check
+
+# Lint and format code
+bun run lint && bun run format
+
+# Run all tests
+bun run test:server        # Database and service tests
+```
+
+### CLI Scaffolding Tools
+
+```
+# Create new page with template
+bun run create:page <path>
+
+# Create markdown files for all locales
+bun run create:md <filename>
+
+# Create API controller with CRUD template
+bun run create:api-controller <path>
+```
+
+#### Examples
+
+```
+# Create a dynamic product page
+bun run create:page /products/[product_id]
+
+# Create localized about page content
+bun run create:md about-us.md
+
+# Create nested API controller
+bun run create:api-controller users/[user_id]/orders
+```
+
+## Authentication Architecture
+
+### better-auth Integration
+
+The template includes a complete authentication system using better-auth, a modern TypeScript-first authentication library with excellent SvelteKit integration.
+
+### Authentication Features
+
+- Multiple Auth Methods - Email/password and OAuth (Google preconfigured)
+- Secure Session Management - Database-backed sessions with automatic renewal
+- Route Protection - Middleware-based authentication for protected routes
+- Type Safety - Full TypeScript integration with reactive auth state
+- Email Verification - Built-in email verification for new accounts
+
+### Auth Configuration
+
+#### Environment Variables
+
+```
+BETTER_AUTH_SECRET=your-secret-key-here
+BETTER_AUTH_URL=http://localhost:5173
+
+# Required for OAuth
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+
+# Database (already configured)
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres
+```
+
+#### Usage Examples
+
+```
+import authClient from '$lib/client/auth/client';
+
+const session = authClient.useSession();
+```
+
+#### Server-Side Session Access
+
+```
+// In load functions (+page.server.ts, +layout.server.ts)
+export async function load({ event }) {
+  const { session, user } = event.locals;
+
+  return {
+    user: user ? { name: user.name, email: user.email } : null
+  };
+}
+```
+
+### Auth Database Schema
+
+The system uses four core tables:
+
+- user - User profiles and account data
+- session - Active sessions with expiration
+- account - OAuth provider connections
+- verification - Email verification tokens
+
+### Route Protection
+
+Routes are automatically protected based on configuration in`src/lib/client/configurations/routes.ts`:
+
+```
+// Protected by default
+{ path: '/dashboard' }
+
+// Public route
+{ path: '/about', authenticationRequired: false }
+```
+
+## Database Architecture
+
+### Service Layer
+
+The template includes a complete database abstraction layer:
+
+```
+// Get service instance for any table
+const userService = serviceFactory.getService(users);
+
+// CRUD operations
+const user = await userService.create({ name: "John", email: "john@example.com" });
+const allUsers = await userService.findAll({ limit: 20, offset: 0 });
+const user = await userService.findById(1);
+await userService.updateById(1, { name: "Jane" });
+await userService.deleteById(1);
+
+// Advanced querying
+const activeUsers = await userService.find(
+  (table) => eq(table.status, 'active'),
+  { limit: 10, orderBy: desc(table.createdAt) }
+);
+```
+
+### Query Utilities
+
+Built-in utilities for handling URL parameters and request body filters:
+
+```
+// Parse URL search params into query conditions
+const filters = getUrlFiltersUtil(url, {
+  searchColumns: [users.name, users.email]
+});
+
+// Parse pagination and sorting from URL
+const options = getUrlOptionsUtil(url, users);
+// ?limit=20&offset=40&orderBy=name,-createdAt
+
+// Parse body filters
+const bodyFilters = getBodyFiltersUtil(
+  { ids: [1, 2, 3] },
+  { ids: users.id }
+);
+```
+
+### Request Helper
+
+Unified API request helper for consistent client-side communication:
+
+```
+import { GET, POST, PUT, DELETE } from '$lib/api/helpers/request';
+
+// GET request with query parameters
+const users = await GET<User[]>('/api/users', {
+  limit: 20,
+  offset: 0,
+  searchTerm: 'john',
+  orderBy: 'name,-createdAt'
+});
+
+// POST request to create data
+const newUser = await POST<CreateUserData, User>(
+  '/api/users',
+  { name: 'John Doe', email: 'john@example.com' }
+);
+
+// PUT request to update data with filters
+const updatedUser = await PUT<UpdateUserData, UserFilters, User>(

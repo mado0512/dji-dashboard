@@ -1,0 +1,1091 @@
+query: notable apps websites built with SvelteKit examples 2024 2025
+
+answer:
+  Several notable web applications built with SvelteKit in 2024 and 2025 showcase diverse functionality, ranging from creative e-commerce to utility-focused tools.
+
+The following projects serve as examples:
+
+Tahsin Shop is a high-end e-commerce frontend utilizing Svelte 5 runes, GSAP for cinematic transitions, and Lenis for smooth scrolling [1].
+
+Digger UI is a music streaming application that features lossless audio playback, offline PWA capabilities, and metadata-rich downloads [2].
+
+Hugin Beta is an enterprise-grade AI chat application that supports multiple AI providers, real-time streaming, and role-based authentication [3].
+
+OpenShutter is a photo gallery management system that integrates multi-storage support including AWS S3 and Google Drive [4].
+
+Planpokr provides real-time planning poker for agile teams using Supabase and Svelte 5 [5].
+
+Willie's Keys is a pass-sharing marketplace built with SvelteKit, Drizzle ORM, and SQLite [6].
+
+Finally, the Svelte Portfolio Builder allows users to create professional portfolios with a drag-and-drop interface and export functionality without requiring a backend [7].
+
+sources (5):
+
+1. tahsinmert/tahsin-shop
+   https://github.com/tahsinmert/tahsin-shop
+   # Repository: tahsinmert/tahsin-shop
+
+A next-gen e-commerce experience built with Svelte 5 (Runes) & GSAP. Featuring cinematic page transitions, magnetic interactions, horizontal scrolling, and high-end creative coding techniques. Awwwards-style performance & aesthetics.
+
+- Stars: 0
+- Forks: 0
+- Watchers: 0
+- Open issues: 0
+- Primary language: Svelte
+- Languages: Svelte (78.9%), TypeScript (18.5%), JavaScript (1.3%), CSS (1.0%), HTML (0.4%)
+- License: MIT License (MIT)
+- Default branch: main
+- Homepage: https://tahsin-shop.vercel.app
+- Created: 2025-11-23T20:56:44Z
+- Last push: 2025-11-23T21:02:31Z
+- Contributors: 1 (top: tahsinmert)
+
+---
+
+ 
+
+# 🎨 Tahsin Shop
+
+![Tahsin Shop Logo](./static/favicon.png)
+
+> **A high-end, experimental e-commerce frontend that redefines digital commerce through cinematic fluidity and micro-interactions.**
+
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://tahsin-shop.vercel.app)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
+
+---
+
+ 
+ 
+
+ 
+
+**Tahsin Shop** is not just an e-commerce site—it's a portfolio masterpiece that showcases the future of web design. Built with cutting-edge technologies and a focus on "vibe" over function, this project demonstrates how emotion and artistry can transform digital commerce into an unforgettable experience.
+
+---
+
+## 🛠️ Tech Stack
+
+![SvelteKit](https://img.shields.io/badge/SvelteKit-FF3E00?style=for-the-badge&logo=svelte&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![GSAP](https://img.shields.io/badge/GSAP-88CE02?style=for-the-badge&logo=greensock&logoColor=white)
+![Lenis](https://img.shields.io/badge/Lenis-000000?style=for-the-badge)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+
+- **SvelteKit** (Svelte 5 / Runes) - Next-generation reactive framework
+- **TypeScript** - Type-safe development
+- **Tailwind CSS** - Utility-first styling
+- **GSAP** (ScrollTrigger, Flip) - Professional-grade animations
+- **Lenis** - Buttery-smooth scrolling
+- **Vercel** - Edge-optimized deployment
+
+---
+
+## 💫 The "Vibe" Philosophy
+
+> *"We do not sell products. We sell feelings. We curate moments."*
+
+In a world saturated with cookie-cutter e-commerce experiences, **Tahsin Shop** breaks the mold. This project exists to prove that web design can be more than just functional—it can be **emotional**, **cinematic**, and **memorable**.
+
+Every interaction, every animation, every pixel is crafted to evoke a feeling. From the moment you land on the site, you're not just browsing products; you're experiencing a carefully choreographed digital performance.
+
+**This is not commerce. This is culture.**
+
+---
+
+## ✨ Features Deep Dive
+
+### 🎬 Cinematic Entrance
+
+A custom preloader that sets the stage for the entire experience. Watch as the percentage counter animates from 0-100%, followed by a dramatic curtain reveal using GSAP's `expo.inOut` easing. The entire sequence is synchronized with hero animations, ensuring a seamless first impression.
+
+**Technical Implementation:**
+
+- GSAP proxy objects for smooth counter animation
+- Full-screen overlay with `z-index: 99999`
+- Body scroll locking during preload
+- Event-driven coordination with hero section
+
+### 🌊 Fluid Navigation
+
+Experience true SPA-like navigation without hard refreshes. Page transitions use a full-screen "curtain" div that slides up to cover the screen, waits for content to load, then reveals the new page with cinematic timing.
+
+**Technical Implementation:**
+
+- SvelteKit's `onNavigate` lifecycle hook
+- GSAP timeline animations
+- Black curtain (`#0A0A0A`) with `yPercent` transforms
+- Smooth content loading coordination
+
+### 🎨 Creative Scroll Experiences
+
+#### Horizontal Scroll Lookbook
+
+A gallery section that "locks" the viewport and transforms vertical scrolling into horizontal movement. As you scroll down, the content slides sideways—like walking through an art gallery.
+
+**Technical Implementation:**
+
+- GSAP ScrollTrigger with `pin: true`
+- Dynamic track width calculation (`1300%` for 13 sections)
+- Parallax effects on images (faster movement for depth)
+- `gsap.matchMedia()` for mobile fallback (vertical stack)
+
+#### Parallax Reveal Footer
+
+A fixed footer that sits behind the main content, revealed as you scroll to the bottom. Features massive typography and a magnetic CTA button that physically moves toward your cursor.
+
+**Technical Implementation:**
+
+- Fixed positioning with `z-index: 0`
+- Main content overlay with `z-index: 10`
+- GSAP magnetic effect with distance calculations
+- Subtle text drift and scale animations
+
+### 🎯 State of the Art: Svelte 5 Runes
+
+Built entirely using Svelte 5's revolutionary runes system—no legacy `export let` or `svelte/store` syntax.
+
+**Technical Implementation:**
+
+- `$state` for reactive primitives (cart items, menu state)
+- `$derived` for computed values (total price, item count)
+- `$effect` for side effects and animations
+- `$props` for component props (Svelte 5 style)
+
+### 🎪 Vibe Interactions
+
+#### Custom Cursor
+
+A blend-mode cursor that expands on hover, showing contextual text ("VIEW", "ADD", "SHOP"). Hidden on touch devices for optimal mobile experience.
+
+#### Magnetic Buttons
+
+Interactive elements that physically move toward the cursor when within a 200px radius, creating a tangible connection between user and interface.
+
+#### Grain Overlay
+
+A subtle, animated film grain texture that adds cinematic depth without interfering with interactions (`pointer-events: none`).
+
+#### Kinetic Typography
+
+Massive, fluid typography that responds to scroll and viewport size. Uses `clamp()` for truly responsive text scaling.
+
+---
+
+## 📁 Project Structure
+
+```
+tahsin-shop/
+├── src/
+│   ├── lib/
+│   │   ├── components/
+│   │   │   ├── ui/
+│   │   │   │   └── FloatingInput.svelte
+│   │   │   ├── CustomCursor.svelte
+│   │   │   ├── Footer.svelte
+│   │   │   ├── Hero.svelte
+│   │   │   ├── NoiseOverlay.svelte
+│   │   │   ├── PageTransition.svelte
+│   │   │   ├── Preloader.svelte
+│   │   │   ├── ProductGrid.svelte
+│   │   │   ├── ShoppingCart.svelte
+│   │   │   └── SmartHeader.svelte
+│   │   ├── stores/
+│   │   │   └── cart.svelte.ts
+│   │   └── utils/
+│   │       └── lenis.ts
+│   ├── routes/
+│   │   ├── checkout/
+│   │   │   ├── +page.svelte
+│   │   │   └── success/
+│   │   │       └── +page.svelte
+│   │   ├── lookbook/
+│   │   │   └── +page.svelte
+│   │   ├── manifesto/
+│   │   │   └── +page.svelte
+│   │   ├── product/
+│   │   │   └── [id]/
+│   │   │       ├── +page.svelte
+│   │   │       └── +page.ts
+│   │   ├── +layout.svelte
+│   │   └── +page.svelte
+│   ├── app.css
+│   └── app.html
+├── package.json
+├── tailwind.config.js
+├── vite.config.ts
+└── svelte.config.js
+```
+
+---
+
+## 🚀 Installation & Setup
+
+### Prerequisites
+
+- **Node.js** 18+
+- **npm** or **pnpm**
+
+### Getting Started
+
+1. **Clone the repository**
+
+```bash
+   git clone https://github.com/yourusername/tahsin-shop.git
+   cd tahsin-shop
+   ```
+
+1. **Install dependencies**
+
+```bash
+   npm install
+   ```
+
+1. **Start the development server**
+
+```bash
+npm run dev
+
+```
+
+4. **Open your browser**
+ Navigate to `http://localhost:5173`
+
+### Build for Production
+
+```
+
+npm run build
+npm run preview
+
+```
+
+---
+
+## ⚡ Performance
+
+Despite heavy animations and complex interactions, **Tahsin Shop** maintains buttery-smooth 60fps performance through:
+
+- **GPU Acceleration**: All animations use `transform` and `opacity` (CSS properties that trigger GPU compositing)
+- **Will-Change Hints**: Strategic use of `will-change` for animated elements
+- **Lazy Loading**: Images load on-demand with `loading="lazy"`
+- **Code Splitting**: SvelteKit's automatic route-based code splitting
+- **Optimized GSAP**: ScrollTrigger uses `scrub` for effi
+
+2. Narfbach/digger-ui
+   https://github.com/Narfbach/digger-ui
+   # Repository: Narfbach/digger-ui
+
+A high-fidelity music streaming web application built with SvelteKit, featuring lossless audio playback, advanced download capabilities, and a modern, responsive interface.
+
+- Stars: 0
+- Forks: 1
+- Watchers: 0
+- Open issues: 0
+- Primary language: TypeScript
+- Languages: TypeScript (50.8%), Svelte (47.3%), JavaScript (0.6%), CSS (0.6%), HTML (0.5%), Dockerfile (0.3%)
+- License: Mozilla Public License 2.0 (MPL-2.0)
+- Topics: downloader, lossless-audio, music-streaming, sveltekit, tidal-client
+- Default branch: main
+- Homepage: https://digger-ui.vercel.app
+- Created: 2025-10-05T20:25:18Z
+- Last push: 2026-01-03T00:19:39Z
+- Contributors: 1 (top: Narfbach)
+
+---
+
+# Digger
+
+A high-fidelity music streaming web application built with SvelteKit, featuring lossless audio playback, advanced download capabilities, and a modern, responsive interface.
+
+[![License: MPL-2.0](https://img.shields.io/badge/License-MPL--2.0-blue.svg)](https://opensource.org/licenses/MPL-2.0)
+[![SvelteKit](https://img.shields.io/badge/SvelteKit-5.0-FF3E00?logo=svelte&logoColor=white)](https://kit.svelte.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+
+## Overview
+
+Digger is a full-featured music streaming platform that provides access to high-fidelity audio content with support for lossless formats including FLAC, MQA, and Dolby Atmos. Built with modern web technologies, it offers a seamless experience across all devices with advanced features like metadata-rich downloads, synced lyrics, and offline PWA capabilities.
+
+## Key Features
+
+### Audio Playback
+
+- **Lossless Streaming**: Support for HI_RES_LOSSLESS (24-bit/192kHz FLAC), LOSSLESS (16-bit/44.1kHz FLAC), and compressed formats
+- **Advanced Player Controls**: Full queue management, shuffle, repeat, seek, and volume controls
+- **Media Session Integration**: Lock screen controls and rich notifications on supported devices
+- **Quality Selection**: Runtime quality switching with optional preloading for gapless transitions
+
+### Content Discovery
+
+- **Powerful Search**: Multi-category search across tracks, albums, artists, and playlists
+- **Keyboard Navigation**: Full keyboard support for efficient browsing
+- **Rich Metadata**: Detailed information including release dates, ISRC codes, and artist bios
+- **Dedicated Pages**: Album, artist, and playlist views with comprehensive metadata
+
+### Download System
+
+- **Metadata Embedding**: Downloads include title, album, artist, ISRC, track/disc numbers, year, and cover art
+- **FFmpeg WASM Integration**: Client-side metadata injection without server processing
+- **Batch Downloads**: One-click album downloads and full artist discography downloads
+- **Quality Preservation**: Downloads honor selected audio quality settings
+
+### Lyrics & Synchronization
+
+- **Synced Lyrics**: Word-by-word karaoke-style highlighting powered by YouLy+
+- **Interactive Display**: Popup viewer with refresh and maximize options
+- **Real-time Sync**: Lyrics automatically follow playback position
+
+### Progressive Web App
+
+- **Installable**: Add to home screen on mobile and desktop platforms
+- **Offline Shell**: Service worker precaches UI for offline navigation
+- **Auto-Updates**: Automatic deployment of new versions with seamless refresh
+- **Custom Branding**: Configurable icons and manifest
+
+### Performance & Caching
+
+- **Redis Integration**: Optional response caching to reduce API latency
+- **Configurable TTL**: Separate cache durations for different content types
+- **Smart Caching**: Respects cache headers and only caches appropriate responses
+- **CORS Proxy**: Built-in proxy routing with multi-endpoint failover
+
+## Technology Stack
+
+### Frontend
+
+- **SvelteKit 5**: Modern meta-framework with Svelte 5 runes for reactive state management
+- **TypeScript**: Full type safety across the entire codebase
+- **Tailwind CSS 4**: Utility-first styling with custom design tokens
+- **Lucide Svelte**: Comprehensive icon library
+
+### Backend & Infrastructure
+
+- **Node.js Adapter**: Production-ready server with SvelteKit adapter-node
+- **Redis**: Optional caching layer for API responses
+- **Docker**: Containerized deployment with Docker Compose support
+- **FFmpeg WASM**: Client-side audio processing for metadata injection
+
+### APIs & Services
+
+- **HIFI API**: Backend music service providing TIDAL content access
+- **YouLy+**: Synchronized lyrics provider
+- **Vercel Analytics**: Optional usage analytics
+
+## Installation & Setup
+
+### Prerequisites
+
+- Node.js 18+ or Bun
+- Optional: Redis for response caching
+- Optional: Docker for containerized deployment
+
+### Local Development
+
+```bash
+# Clone the repository
+git clone https://github.com/Narfbach/digger-ui.git
+cd digger-ui
+
+# Install dependencies
+npm install
+
+# Create environment file
+cp .env.example .env
+
+# Start development server
+npm run dev
+```
+
+The application will be available at `http://localhost:5173`
+
+### Environment Configuration
+
+Create a `.env` file based on `.env.example`:
+
+```env
+# Optional: Custom application title
+TITLE=Digger
+
+# Optional: Redis caching (recommended for production)
+REDIS_URL=redis://localhost:6379
+
+# Or configure Redis components separately
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=
+REDIS_USERNAME=
+
+# Optional: Cache tuning
+REDIS_CACHE_TTL_SECONDS=300
+REDIS_CACHE_TTL_SEARCH_SECONDS=300
+REDIS_CACHE_TTL_TRACK_SECONDS=120
+REDIS_CACHE_MAX_BODY_BYTES=200000
+```
+
+### Production Build
+
+```bash
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+### Docker Deployment
+
+```bash
+# Build and start with Docker Compose
+docker compose up --build
+
+# Access at http://localhost:5000
+```
+
+The Docker setup automatically configures Redis caching and production optimizations.
+
+## Architecture
+
+### Project Structure
+
+```
+digger-ui/
+├── src/
+│   ├── lib/
+│   │   ├── api.ts                    # API client with proxy support
+│   │   ├── types.ts                  # TypeScript type definitions
+│   │   ├── config.ts                 # Configuration and constants
+│   │   ├── stores/
+│   │   │   └── player.ts             # Global player state management
+│   │   └── components/
+│   │       ├── AudioPlayer.svelte    # Main audio player component
+│   │       ├── SearchInterface.svelte # Search and discovery UI
+│   │       ├── TrackList.svelte      # Track listing component
+│   │       └── QualitySelector.svelte # Audio quality selector
+│   ├── routes/
+│   │   ├── +layout.svelte            # Root layout with navigation
+│   │   ├── +page.svelte              # Home page
+│   │   ├── album/[id]/+page.svelte   # Album detail page
+│   │   ├── artist/[id]/+page.svelte  # Artist detail page
+│   │   ├── playlist/[id]/+page.svelte # Playlist detail page
+│   │   └── api/proxy/+server.ts      # Backend proxy endpoint
+│   └── app.css                       # Global styles and Tailwind config
+├── static/
+│   ├── icons/                        # PWA icons
+│   ├── manifest.webmanifest          # PWA manifest
+│   └── offline.html                  # Offline fallback page
+├── Dockerfile                        # Production container
+├── docker-compose.yml                # Docker Compose configuration
+└── package.json                      # Dependencies and scripts
+```
+
+### State Management
+
+The application uses Svelte 5's runes system for reactive state:
+
+- `$state`: Reactive variables for player state (current track, playing status, volume)
+- `$derived`: Computed values based on reactive state
+- Svelte stores: Global player state accessible across components
+
+### API Integration
+
+All API requests are proxied through SvelteKit's backend to handle CORS and caching:
+
+1. Client makes request to `/api/proxy`
+2. SvelteKit server checks Redis cache (if configured)
+3. On cache miss, fetches from HIFI API
+4. Response is cached and re
+
+3. telemarkfylke/hugin-beta
+   https://github.com/telemarkfylke/hugin-beta
+   # Repository: telemarkfylke/hugin-beta
+
+Hugin evolved
+
+- Stars: 0
+- Forks: 1
+- Watchers: 0
+- Open issues: 34
+- Primary language: TypeScript
+- Languages: TypeScript (53.8%), Svelte (44.8%), CSS (1.0%), JavaScript (0.3%), HTML (0.1%)
+- License: MIT License (MIT)
+- Default branch: main
+- Homepage: https://hugin-beta.telemarkfylke.no
+- Created: 2025-09-12T11:33:12Z
+- Last push: 2026-05-28T19:51:20Z
+- Contributors: 4 (top: jorgtho, fuzzbin, mn3m, Teleruin)
+- Releases: 15
+- Latest release: 0.2.8 (2026-05-21T17:10:44Z)
+
+---
+
+# Hugin Beta
+
+A multi-provider AI chat application built with SvelteKit, providing a unified interface to multiple AI providers with enterprise-grade authentication and real-time streaming responses.
+
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
+[![SvelteKit](https://img.shields.io/badge/SvelteKit-2.22-orange.svg)](https://kit.svelte.dev/)
+[![Svelte 5](https://img.shields.io/badge/Svelte-5.0-red.svg)](https://svelte.dev/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## Overview
+
+Hugin Beta is an internal AI-agent web application designed to provide a democratic, secure, flexible, and user-friendly AI solution. The application supports multiple AI providers through a vendor-agnostic architecture, ensuring built-in privacy and seamless user experience.
+
+### Key Features
+
+- **Multi-Provider Support** - Unified interface for OpenAI and Mistral AI (Ollama support in development)
+- **Real-Time Streaming** - Server-Sent Events (SSE) for incremental AI responses
+- **Enterprise Authentication** - Microsoft Entra ID integration with role-based access control
+- **Multi-Modal Input** - Support for text, images, and document uploads
+- **Modern UI** - Svelte 5 Runes for reactive state management with markdown and LaTeX rendering
+
+---
+
+## Table of Contents
+
+- [Architecture](#architecture)
+
+- [System Overview](#system-overview)
+ - [Vendor Abstraction](#vendor-abstraction)
+ - [Authentication Flow](#authentication-flow)
+ - [Streaming Architecture](#streaming-architecture)
+
+- [Getting Started](#getting-started)
+
+- [Prerequisites](#prerequisites)
+ - [Installation](#installation)
+ - [Environment Configuration](#environment-configuration)
+
+- [Development](#development)
+
+- [Commands](#commands)
+ - [Project Structure](#project-structure)
+
+- [API Reference](#api-reference)
+- [Type System](#type-system)
+- [Testing](#testing)
+- [Deployment](#deployment)
+- [License](#license)
+
+---
+
+## Architecture
+
+### System Overview
+
+Hugin Beta follows an API-first architecture where all frontend capabilities are backed by corresponding backend APIs. The application is built as a SvelteKit monolith with clear separation between client and server code.
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                         Client Layer                            │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────────┐ │
+│  │ Chat.svelte │  │ ChatState   │  │ SSE Stream Consumer     │ │
+│  │ (UI)        │◄─┤ (Svelte 5)  │◄─┤ (PostChatMessage)       │ │
+│  └─────────────┘  └─────────────┘  └─────────────────────────┘ │
+└────────────────────────────┬────────────────────────────────────┘
+                             │ HTTP/SSE
+┌────────────────────────────▼────────────────────────────────────┐
+│                        Server Layer                             │
+│  ┌─────────────────┐  ┌──────────────┐  ┌───────────────────┐  │
+│  │ Auth Middleware │─►│ API Routes   │─►│ Vendor Factory    │  │
+│  │ (Entra ID)      │  │ (/api/chat)  │  │ (ai-vendors.ts)   │  │
+│  └─────────────────┘  └──────────────┘  └─────────┬─────────┘  │
+└───────────────────────────────────────────────────┼─────────────┘
+                                                    │
+┌───────────────────────────────────────────────────▼─────────────┐
+│                      AI Provider Layer                          │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐             │
+│  │   OpenAI    │  │  Mistral AI │  │   Ollama    │             │
+│  │   Vendor    │  │   Vendor    │  │   Vendor    │             │
+│  └─────────────┘  └─────────────┘  └─────────────┘             │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Vendor Abstraction
+
+The application uses a plugin-based vendor pattern. All AI providers implement the `IAIVendor` interface:
+
+```typescript
+interface IAIVendor {
+  createChatResponse(chatRequest: ChatRequest): Promise<ChatResponseObject>
+  createChatResponseStream(chatRequest: ChatRequest): Promise<ChatResponseStream>
+}
+```
+
+Each vendor implementation consists of three components:
+
+| File | Purpose |
+| --- | --- |
+| `{vendor}-vendor.ts` | Implements `IAIVendor` interface |
+| `{vendor}-mapping.ts` | Converts between internal types and vendor SDK types |
+| `{vendor}-stream.ts` | Handles SSE streaming and event normalization |
+
+**Data Flow:**
+
+```
+ChatRequest → Mapping Layer → Vendor SDK → Vendor Response → Mapping Layer → ChatResponse
+```
+
+### Authentication Flow
+
+**Production (Microsoft Entra ID):**
+
+1. Azure App Service EasyAuth validates JWT token
+2. Claims passed via `X-MS-CLIENT-PRINCIPAL` header (base64-encoded)
+3. Middleware extracts and validates claims with Zod
+4. `AuthenticatedPrincipal` object created with userId, name, roles, and groups
+
+**Development (Mock Authentication):**
+
+- Enabled via `MOCK_AUTH="true"` environment variable
+- Roles and groups configurable via environment variables
+
+### Streaming Architecture
+
+Real-time AI responses use Server-Sent Events with the following event types:
+
+| Event | Description |
+| --- | --- |
+| `response.config` | Chat configuration metadata nobody uses? |
+| `response.started` | Response initiated with responseId |
+| `response.output_text.delta` | Incremental text chunk |
+| `response.done` | Completion with token usage statistics |
+| `response.error` | Error information |
+| `conversation.created` | New conversation identifier |
+
+All events are validated using Zod discriminated unions for type-safe handling.
+
+---
+
+### Authorization
+
+- Uses the functions in authorization.ts
+- Regular users can define their own chatConfigs and test basically any config against the api/chat endpoint
+
+- But they cannot define chatconfigs with predefined agent/prompt-ids where the config is set up in a vendor.
+ - They can use predefined chatconfigs only if they have access to the agentId in some defined chatconfig in db - which is created by a user with more permissions.
+
+## Getting Started
+
+### Prerequisites
+
+- **Node.js** - Latest LTS version (v20+)
+- **npm** - Package manager (included with Node.js)
+- **API Keys** - At least one of: Mistral API key, OpenAI API key, or local Ollama instance
+
+### Installation
+
+```bash
+# Clone the repository
+git clone <your-repository-url>
+cd hugin-beta
+
+# Install dependencies
+npm install
+```
+
+### Environment Configuration
+
+Create a `.env` file in the project root:
+
+```bash
+# AI Provider API Keys (at least one required)
+MISTRAL_API_KEY_PROJECT_DEFAULT="your-mistral-api-key"
+OPENAI_API_KEY_PROJECT_DEFAULT="your-openai-api-key"
+
+# Mock Database Configuration
+MOCK_DB="true"                    # Use in-memory database (required for local dev)
+# Or production Database Configuration
+MONGODB_CONNECTION_STRING="mongodb+srv://..." # Production MongoDB connection
+MONGODB_DB_NAME="mugin" # Name of database
+
+# Authentication
+MOCK_AUTH="true"                  # Enable mock authentication for local development
+MOCK_AUTH_ROLES="Employee,Admin"  # Comma-separated role values
+MOCK_AUTH_GROUPS="group-id-123"   # Comma-separated group IDs
+
+# Application Roles
+APP_ROLE_EMPLOYEE="Employee"
+APP_ROLE_STUDENT="Student"
+APP_ROLE_ADMIN="Admin"
+APP_ROLE_AGENT_MAINTAINER="AgentMaintainer"
+```
+
+---
+
+## Development
+
+### Commands
+
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start development server at `http://localhost:5173` |
+| `npm run dev -- --open` | Start dev server an
+
+4. ylahav/openshutter
+   https://github.com/ylahav/openshutter
+   # Repository: ylahav/openshutter
+
+- Stars: 0
+- Forks: 0
+- Watchers: 0
+- Open issues: 0
+- Primary language: Svelte
+- Languages: Svelte (47.7%), TypeScript (45.1%), SCSS (3.9%), JavaScript (1.5%), CSS (0.7%), PowerShell (0.6%), Shell (0.4%), HTML, Dockerfile
+- License: MIT License (MIT)
+- Default branch: main
+- Created: 2025-09-08T09:07:04Z
+- Last push: 2026-06-16T12:02:45Z
+- Contributors: 1 (top: ylahav)
+
+---
+
+# OpenShutter 📸
+
+A comprehensive photo gallery management system with multi-storage support, advanced organization features, and beautiful presentations.
+
+🌐 **Live Demo**: [demo.openshutter.org](https://demo.openshutter.org)
+
+## ✨ Features
+
+- **Multi-Storage Support**: Google Drive, AWS S3, Backblaze B2, Wasabi, and local storage
+- **Smart Tagging System**: Organize photos with intelligent tags and dynamic collections
+- **Advanced Search**: Comprehensive search across photos, albums, people, and locations
+- **People Management**: Tag and organize photos by people with multi-language support
+- **Face Recognition**: Detect faces in photos, match them to known people, and auto-tag photos
+- **Location Management**: Geospatial location tracking with coordinates and categories
+- **Album Management**: Hierarchical albums with advanced privacy controls, drag-and-drop reordering, and accordion navigation
+- **Advanced Access Control**: Granular permissions for albums (public, private, user/group-specific)
+- **Owner Dashboard**: Dedicated interface for album owners to manage their collections
+- **Viewer Member Area**: Simple `/member` area for Viewer (guest) users to edit profile, preferred language, and password
+- **Cover Photo Selection**: Admin interface for selecting album cover photos
+- **Batch Operations**: Upload and manage hundreds of photos efficiently
+- **Bulk Photo Management**: Apply tags, locations, and metadata to multiple photos
+- **Multi-Language Support**: Full internationalization (i18n) with RTL support, reactive translation system, and comprehensive language coverage
+- **Responsive Design**: Beautiful galleries for all devices with masonry layouts; elegant template: mobile hamburger menu with full navigation (menu, auth, template/language/theme); lightbox uses SVG icons for consistent display; sub-album cards show leading photos
+- **Mobile-First PWA**: Progressive Web App with offline capabilities and mobile optimization
+- **Touch-Optimized Interface**: Mobile navigation, photo upload, and search with gesture support
+- **Real-time Updates**: Live photo uploads and collaborative features
+- **Role-Based Access**: Admin, Owner, and Guest roles with different capabilities
+- **Storage Management**: Configure and manage multiple storage providers through admin interface
+- **Profile Management**: Users can edit their profiles and change passwords
+- **Welcome Emails**: Optional, configurable welcome email sent when admins create new users (SMTP + template in Site Config)
+- **Social Sharing**: Configurable share buttons (X, Facebook, WhatsApp, Copy link) on album and photo level; single-photo links open at that photo (`#p=index`); control which options and where to show (Site Config → Sharing)
+- **Template Customization**: Customizable gallery templates and themes
+- **Site Configuration**: Sidebar navigation for many sections (Basic, Languages, Branding, SEO, Contact, Services, Navigation, EXIF, Sharing, Email); dropdown on small screens
+- **Page Builder**: Flexible row/column-based page builder with module system
+
+- Create custom pages with drag-and-drop row/column layouts
+ - Module types: Hero, Rich Text, Feature Grid, Albums Grid, Call-to-Action
+ - Form-based module configuration with icon selector and rich text editing
+ - Multi-language support for page titles, subtitles, and module content
+ - Visual row reordering with immediate feedback
+
+- **About Page**: Dedicated landing page that introduces openShutter and highlights key features
+- **Blog Categories Management**: Create and manage blog categories with multi-language support
+- **Content Protection**: Advanced right-click and developer tools protection with smart exceptions
+- **Security Features**: Multi-layer content protection with customizable warnings
+- **Face Recognition**: AI-powered face detection and recognition with automatic people tagging
+
+## 🚀 Tech Stack
+
+- **Frontend**: SvelteKit 2, Svelte 5, TypeScript, Tailwind CSS
+- **Backend**: Node.js, NestJS, Mongoose
+- **Database**: MongoDB
+- **Storage**: Google Drive API, AWS S3, Backblaze B2, Wasabi, Local Storage
+- **Authentication**: JWT-based sessions compatible with SvelteKit (see env examples below)
+- **Rich Text**: Tiptap Editor
+- **State Management**: Svelte stores and reactivity (migrating from React Query)
+
+## 📱 Mobile Features
+
+- **Progressive Web App (PWA)**: Install on mobile devices with native app experience
+- **Offline Support**: View cached photos and albums without internet connection
+- **Touch Navigation**: Swipe gestures, pinch-to-zoom, and touch-friendly controls
+- **Mobile Upload**: Direct camera integration for photo capture and upload
+- **Mobile Search**: Touch-optimized search with filters and gesture navigation
+- **Responsive Gallery**: Masonry layouts optimized for mobile screens
+- **Mobile Shortcuts**: Quick access to mobile-optimized features
+
+## 🔒 Content Protection
+
+- **Right-Click Protection**: Disables context menu while preserving functionality in text editors
+- **Developer Tools Blocking**: Prevents F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U shortcuts
+- **Content Security**: Blocks Ctrl+S (save page) and drag-and-drop of images
+- **Smart Exceptions**: Allows right-click in text editors (ProseMirror, Quill, TipTap)
+- **Configurable Warnings**: Customizable warning messages for blocked actions
+- **Multi-Layer Protection**: CSS and JavaScript-based content protection
+- **Accessibility Preserved**: Maintains legitimate user interactions and accessibility
+
+## 📋 Prerequisites
+
+- Node.js 18+ (includes [Corepack](https://nodejs.org/api/corepack.html) for pnpm)
+- **pnpm** — enable with `corepack enable` then `corepack prepare pnpm@10.33.0 --activate` (version matches root `package.json` `packageManager`), or see [pnpm installation](https://pnpm.io/installation)
+- **MongoDB** — a running server reachable at `MONGODB_URI` (default `mongodb://localhost:27017/openshutter`; see [docs/guides/LOCAL_DEVELOPMENT.md](docs/guides/LOCAL_DEVELOPMENT.md))
+- Google Cloud Platform account (for Google Drive integration)
+- AWS account (for S3 integration, optional)
+
+## 🛠️ Installation
+
+### Local Development
+
+1. **Clone the repository**
+
+```bash
+   git clone <repository-url>
+   cd openshutter
+   ```
+
+1. **Install dependencies**
+
+```bash
+   pnpm install
+   ```
+
+1. **Set up environment variables**
+
+**Backend** (`backend/.env`):
+   ```bash
+   cd backend
+   cp env.example .env
+   ```
+
+Edit `backend/.env` with your configuration:
+   ```env
+   # MongoDB Configuration
+   MONGODB_URI=mongodb://localhost:27017/openshutter
+   MONGODB_DB=openshutter
+
+# Authentication Configuration
+   AUTH_JWT_SECRET=your_jwt_secret
+
+# Application Configuration
+   NODE_ENV=development
+   PORT=5000
+   FRONTEND_URL=http://localhost:4000
+   # Optional: Separate URL for email links (falls back to FRONTEND_URL)
+   EMAIL_BASE_URL=http://localhost:4000
+   # Optional: Separate URL for Google Drive OAuth callback (falls back to FRONTEND_URL)
+   GOOGLE_OAUTH_CALLBACK_BASE_URL=http://localhost:4000
+   ```
+
+**Frontend** (`frontend/.env.production` or `frontend/.env.development`):
+   ```bash
+   cd frontend
+   cp env.development.example .env.development
+   ```
+
+Edit `frontend/.env.development` with your configuration:
+   ```env
+   # Authentication Configuration (SvelteKit)
+   AUTH_JWT_SECRET=your_jwt_secret
+
+# Application Configuration
+   NODE_ENV=development
+   BACKEND_URL=http://localhost:5000
+   PORT=4000
+   ```
+
+1. **Set up MongoDB**
+
+- Install MongoDB locally or use MongoDB Atlas
+ - Create a database named `openshutter` (or rely on the driver creating it on f
+
+5. Search code, repositories, users, issues, pull requests...
+   https://github.com/kulaizki/planpokr/
+   GitHub - kulaizki/planpokr: A modern, real-time planning poker application for agile teams to estimate user stories efficiently and collaboratively.
+[Skip to content](#start-of-content)
+## Navigation Menu
+Toggle navigation
+[](https://github.com/)
+[Sign in](https://github.com/login?return_to=https://github.com/kulaizki/planpokr/)
+Appearance settings
+Search or jump to...
+# Search code, repositories, users, issues, pull requests...
+ 
+Search
+Clear
+[Search syntax tips](https://docs.github.com/search-github/github-code-search/understanding-github-code-search-syntax)
+# Provide feedback
+ 
+We read every piece of feedback, and take your input very seriously.
+Include my email address so I can be contacted
+CancelSubmit feedback
+# Saved searches
+## Use saved searches to filter your results more quickly
+ 
+Name
+Query
+To see all available qualifiers, see our[documentation](https://docs.github.com/search-github/github-code-search/understanding-github-code-search-syntax).
+CancelCreate saved search
+[Sign in](https://github.com/login?return_to=https://github.com/kulaizki/planpokr/)
+[Sign up](https://github.com/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=/%3Cuser-name%3E/%3Crepo-name%3E&source=header-repo&source_repo=kulaizki/planpokr)
+Appearance settings
+Resetting focus
+You signed in with another tab or window.[Reload]()to refresh your session.You signed out in another tab or window.[Reload]()to refresh your session.You switched accounts on another tab or window.[Reload]()to refresh your session.Dismiss alert
+{{ message }}
+[kulaizki](https://github.com/kulaizki)/**[planpokr](https://github.com/kulaizki/planpokr)**Public
+* [Notifications](https://github.com/login?return_to=/kulaizki/planpokr)You must be signed in to change notification settings
+* [Fork0](https://github.com/login?return_to=/kulaizki/planpokr)
+* [Star1](https://github.com/login?return_to=/kulaizki/planpokr)
+A modern, real-time planning poker application for agile teams to estimate user stories efficiently and collaboratively.
+[planpokr.vercel.app](https://planpokr.vercel.app)
+### License
+[MIT license](https://github.com/kulaizki/planpokr/blob/main/LICENSE)
+[1star](https://github.com/kulaizki/planpokr/stargazers)[0forks](https://github.com/kulaizki/planpokr/forks)[Branches](https://github.com/kulaizki/planpokr/branches)[Tags](https://github.com/kulaizki/planpokr/tags)[Activity](https://github.com/kulaizki/planpokr/activity)
+[Star](https://github.com/login?return_to=/kulaizki/planpokr)
+[Notifications](https://github.com/login?return_to=/kulaizki/planpokr)You must be signed in to change notification settings
+# kulaizki/planpokr
+main
+[Branches](https://github.com/kulaizki/planpokr/branches)[Tags](https://github.com/kulaizki/planpokr/tags)
+[](https://github.com/kulaizki/planpokr/branches)[](https://github.com/kulaizki/planpokr/tags)
+Go to file
+Code
+Open more actions menu
+## Folders and files
+|Name|Name|
+Last commit message
+|
+Last commit date
+|
+## Latest commit
+## History
+[63 Commits](https://github.com/kulaizki/planpokr/commits/main/)
+[](https://github.com/kulaizki/planpokr/commits/main/)
+|
+[.vscode](https://github.com/kulaizki/planpokr/tree/main/.vscode)
+|
+[.vscode](https://github.com/kulaizki/planpokr/tree/main/.vscode)
+|
+|
+|
+[src](https://github.com/kulaizki/planpokr/tree/main/src)
+|
+[src](https://github.com/kulaizki/planpokr/tree/main/src)
+|
+|
+|
+[static](https://github.com/kulaizki/planpokr/tree/main/static)
+|
+[static](https://github.com/kulaizki/planpokr/tree/main/static)
+|
+|
+|
+[supabase](https://github.com/kulaizki/planpokr/tree/main/supabase)
+|
+[supabase](https://github.com/kulaizki/planpokr/tree/main/supabase)
+|
+|
+|
+[.gitignore](https://github.com/kulaizki/planpokr/blob/main/.gitignore)
+|
+[.gitignore](https://github.com/kulaizki/planpokr/blob/main/.gitignore)
+|
+|
+|
+[.npmrc](https://github.com/kulaizki/planpokr/blob/main/.npmrc)
+|
+[.npmrc](https://github.com/kulaizki/planpokr/blob/main/.npmrc)
+|
+|
+|
+[.prettierignore](https://github.com/kulaizki/planpokr/blob/main/.prettierignore)
+|
+[.prettierignore](https://github.com/kulaizki/planpokr/blob/main/.prettierignore)
+|
+|
+|
+[.prettierrc](https://github.com/kulaizki/planpokr/blob/main/.prettierrc)
+|
+[.prettierrc](https://github.com/kulaizki/planpokr/blob/main/.prettierrc)
+|
+|
+|
+[LICENSE](https://github.com/kulaizki/planpokr/blob/main/LICENSE)
+|
+[LICENSE](https://github.com/kulaizki/planpokr/blob/main/LICENSE)
+|
+|
+|
+[README.md](https://github.com/kulaizki/planpokr/blob/main/README.md)
+|
+[README.md](https://github.com/kulaizki/planpokr/blob/main/README.md)
+|
+|
+|
+[eslint.config.js](https://github.com/kulaizki/planpokr/blob/main/eslint.config.js)
+|
+[eslint.config.js](https://github.com/kulaizki/planpokr/blob/main/eslint.config.js)
+|
+|
+|
+[package-lock.json](https://github.com/kulaizki/planpokr/blob/main/package-lock.json)
+|
+[package-lock.json](https://github.com/kulaizki/planpokr/blob/main/package-lock.json)
+|
+|
+|
+[package.json](https://github.com/kulaizki/planpokr/blob/main/package.json)
+|
+[package.json](https://github.com/kulaizki/planpokr/blob/main/package.json)
+|
+|
+|
+[svelte.config.js](https://github.com/kulaizki/planpokr/blob/main/svelte.config.js)
+|
+[svelte.config.js](https://github.com/kulaizki/planpokr/blob/main/svelte.config.js)
+|
+|
+|
+[tailwind.config.js](https://github.com/kulaizki/planpokr/blob/main/tailwind.config.js)
+|
+[tailwind.config.js](https://github.com/kulaizki/planpokr/blob/main/tailwind.config.js)
+|
+|
+|
+[tsconfig.json](https://github.com/kulaizki/planpokr/blob/main/tsconfig.json)
+|
+[tsconfig.json](https://github.com/kulaizki/planpokr/blob/main/tsconfig.json)
+|
+|
+|
+[vite.config.ts](https://github.com/kulaizki/planpokr/blob/main/vite.config.ts)
+|
+[vite.config.ts](https://github.com/kulaizki/planpokr/blob/main/vite.config.ts)
+|
+|
+|
+View all files
+|
+## Repository files navigation
+# PlanPokr - Real-time Planning Poker
+[](#planpokr---real-time-planning-poker)
+A modern, real-time planning poker application for agile teams to estimate user stories efficiently and collaboratively.
+[![PlanPokr](https://camo.githubusercontent.com/25e4d3afdb05f96a6fca17ce8a6b8ec261aae4f5efa63342a93d050a8c9df14e/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f506c616e506f6b722d312e302e302d626c7565)](https://camo.githubusercontent.com/25e4d3afdb05f96a6fca17ce8a6b8ec261aae4f5efa63342a93d050a8c9df14e/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f506c616e506f6b722d312e302e302d626c7565)[![License](https://camo.githubusercontent.com/4c8edb73fd95ab52c2eceb5635ead9af07567d17386848ed80d79358fe48b72a/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6c6963656e73652d4d49542d677265656e)](https://camo.githubusercontent.com/4c8edb73fd95ab52c2eceb5635ead9af07567d17386848ed80d79358fe48b72a/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6c6963656e73652d4d49542d677265656e)
+planpokr-preview.mp4
+## Features
+[](#features)
+* **Real-time Collaboration**: Instantly see votes and status updates from all team members
+* **No Account Required**: Generate a unique game link and share with your team to start immediately
+* **Automatic Vote Reveal**: Votes are automatically revealed when everyone has voted
+* **Story Management**: Set and reset stories for continuous estimation sessions
+* **Mobile Responsive**: Works on all devices, from phones to desktops
+* **Copy Invite Link**: Easily share the game with team members
+* **Player Presence**: See who's online and their voting status
+## Tech Stack
+[](#tech-stack)
+* **Frontend**:[Svelte 5](https://svelte.dev)&[SvelteKit](https://kit.svelte.dev/)
+* **Styling**:[TailwindCSS](https://tailwindcss.com)
+* **Real-time Backend**:[Supabase](https://supabase.com)
+* **TypeScript**: For type safety and better developer experience
+* **Architecture**: Modular design with separation of concerns:
+* `realtime.ts`: WebSocket communication layer
+* `gameStore.ts`: State management
+* `game.service.ts`: Service layer for UI operations
+## Getting Started
+[](#getting-started)
+### Prerequisites
+[](#prerequisites)
+* Node.js (v16 
