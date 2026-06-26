@@ -1,6 +1,4 @@
 import type { GetWaylinesResult } from "$lib/types/wayline";
-import type { MockMode } from "./index";
-import { getWaylineDetailMock } from "$lib/mock/wayline-details";
 
 // ── 贵州茗峰农业 — 航线 ──────────────────────────────
 // 茶园植保喷洒 + 山区地形测绘 + 河谷运输
