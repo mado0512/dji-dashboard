@@ -44,15 +44,16 @@ declare global {
         flyTo: (opts: { center?: [number, number]; zoom?: number; duration?: number }) => void;
         addSource: (id: string, source: object) => void;
         addLayer: (layer: object) => void;
-        fitBounds: (bounds: [[number, number], [number, number]], opts?: { padding?: number }) => void;
+        fitBounds: (
+          bounds: [[number, number], [number, number]],
+          opts?: { padding?: number },
+        ) => void;
       };
       LngLatBounds: new (sw: [number, number], ne: [number, number]) => object;
-      Popup: new (opts?: {
-        closeButton?: boolean;
-        closeOnClick?: boolean;
-        className?: string;
-      }) => {
-        setLngLat: (coords: [number, number]) => { setHTML: (html: string) => { addTo: (map: object) => void } };
+      Popup: new (opts?: { closeButton?: boolean; closeOnClick?: boolean; className?: string }) => {
+        setLngLat: (coords: [number, number]) => {
+          setHTML: (html: string) => { addTo: (map: object) => void };
+        };
         remove: () => void;
       };
     };

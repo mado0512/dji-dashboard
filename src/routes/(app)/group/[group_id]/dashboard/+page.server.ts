@@ -4,7 +4,7 @@ import { DeviceTable } from "$lib/server/db";
 
 const dt = new DeviceTable();
 
-export async function load({ params }) {
+export async function load({ params }: { params: { group_id: string } }) {
   await dt.init();
   const { list: devices } = await GetDeviceList(params.group_id);
   await dt.insert(devices);

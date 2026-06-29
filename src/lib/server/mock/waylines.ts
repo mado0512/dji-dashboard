@@ -95,5 +95,5 @@ export async function getWaylinesMock(
 ): Promise<GetWaylinesResult> {
   if (mode === "static") return getWaylineListMock(group_id, opts);
   if (mode === "api") return getWaylineListApiMock(group_id, opts);
-  throw new Error(`Mock mode "${mode}" not supported for waylines`);
+  throw new Error(`Mock mode "${String(mode)}" not supported for waylines`);
 }

@@ -3,7 +3,7 @@ import { getAllElements } from "$lib/server/dji/elements";
 import { getAllUsers } from "$lib/server/dji/users";
 import { getAllWaylines } from "$lib/server/dji/waylines";
 
-export async function load({ params }) {
+export async function load({ params }: { params: { group_id: string } }) {
   const group_id = params.group_id;
 
   const devices = await getAllDevices(group_id);

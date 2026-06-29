@@ -58,5 +58,5 @@ export async function getDevicesMock(
 ): Promise<GetDevicesResult> {
   if (mode === "static") return getDeviceListMock(group_id);
   if (mode === "api") return getDeviceListApiMock(group_id);
-  throw new Error(`Mock mode "${mode}" not supported for devices`);
+  throw new Error(`Mock mode "${String(mode)}" not supported for devices`);
 }

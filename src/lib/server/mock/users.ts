@@ -80,5 +80,5 @@ export async function getUsersMock(
 ): Promise<GetUsersResult> {
   if (mode === "static") return getUserListMock(group_id, opts);
   if (mode === "api") return getUserListApiMock(group_id, opts);
-  throw new Error(`Mock mode "${mode}" not supported for users`);
+  throw new Error(`Mock mode "${String(mode)}" not supported for users`);
 }

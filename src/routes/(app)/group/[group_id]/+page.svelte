@@ -1,6 +1,5 @@
 <script lang="ts">
   import DeviceCard from "$lib/components/DeviceCard.svelte";
-  import List from "$lib/components/List.svelte";
   import UserCard from "$lib/components/UserCard.svelte";
   import WaylineDashboard from "$lib/components/WaylineDashboard.svelte";
 
@@ -21,10 +20,11 @@
       <li class="card"><DeviceCard {device} /></li>
     {/each}
   </div>
-<!-- 
+  <!-- 
   <List entity="Elements" items={data.mapElements} fn={(e) => e.name} /> -->
-
-  <WaylineDashboard waylines={data.waylines} />
+  <div class="waylineDashboard-wrapper">
+    <WaylineDashboard waylines={data.waylines} />
+  </div>
 </div>
 
 <style>
@@ -71,4 +71,30 @@
   .card {
     transition: filter 0.3s ease;
   }
+
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+      padding: var(--space-sm);
+      gap: var(--space-md);
+    }
+
+    .container > :global(*) {
+      flex: 1 1 auto;
+      width: 100%;
+    }
+
+    .container > :not(:first-child) {
+      border-left: none;
+      padding-left: 0;
+      border-top: 1px solid var(--border-light);
+      padding-top: var(--space-md);
+    }
+  }
+  /* 
+  @media (min-width: 980px) {
+    .container {
+      background-color: rgba(255, 0, 0, 0.176);
+    }
+  } */
 </style>

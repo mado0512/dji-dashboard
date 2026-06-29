@@ -75,5 +75,5 @@ export async function getElementsMock(
 ): Promise<GetElementsResult> {
   if (mode === "static") return getElementListMock(group_id, opts);
   if (mode === "api") return getElementListApiMock(group_id, opts);
-  throw new Error(`Mock mode "${mode}" not supported for elements`);
+  throw new Error(`Mock mode "${String(mode)}" not supported for elements`);
 }
