@@ -28,3 +28,6 @@ vite.config.ts.timestamp-*
 
 # Personal
 /GIT_CHEATSHEET.md
+
+# test files
+src/**/*.test.ts
