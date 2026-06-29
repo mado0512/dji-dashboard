@@ -23,4 +23,7 @@ export default defineConfig({
       adapter: adapter(),
     }),
   ],
+  test: {
+    include: ["src/**/*.test.ts"],
+  },
 });
