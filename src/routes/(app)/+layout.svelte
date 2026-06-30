@@ -2,6 +2,7 @@
   import logo from "$lib/assets/Logo.svg";
 
   let { children } = $props();
+  import "../../app.css"
 
   import { afterNavigate, beforeNavigate, goto } from "$app/navigation";
   import { page } from "$app/state";
