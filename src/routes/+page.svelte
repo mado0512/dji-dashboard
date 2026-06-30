@@ -51,11 +51,18 @@
   }
 </script>
 
-<div id="unicorn-container" class="scene-bg"></div>
+<div
+  id="unicorn-container"
+  class="scene-bg fixed inset-0 w-screen h-screen"
+></div>
 
-<div class="app-shell">
-  <header class="app-header">
-    <span class="app-logo"><img src={logo} alt="Logo" class="logo-img" /></span>
+<div
+  class="app-shell relative z-1 flex flex-col min-h-screen justify-center items-center"
+>
+  <header
+    class="app-header relative z-11 flex items-center justify-between px-2.5 h-14 bg-neutral-100 border border-neutral-200 shrink-0 rounded-md w-125 scale-150"
+  >
+    <span class="app-logo"><img src={logo} alt="Logo" class="logo-img h-6 w-auto" /></span>
 
     <form
       class="group-form"
@@ -84,16 +91,16 @@
 <style>
   /* ── Full-viewport WebGL background ───────────── */
 
-  .scene-bg {
+  /* .scene-bg {
     position: fixed;
     inset: 0;
     width: 100vw;
     height: 100vh;
-  }
+  } */
 
   /* ── UI layer on top ──────────────────────────── */
 
-  .app-shell {
+  /* .app-shell {
     position: relative;
     z-index: 1;
     display: flex;
@@ -101,9 +108,9 @@
     min-height: 100vh;
     justify-content: center;
     align-items: center;
-  }
+  } */
 
-  .app-header {
+  /* .app-header {
     position: relative;
     z-index: 11;
     display: flex;
@@ -117,9 +124,9 @@
     border-radius: var(--radius-sm);
     width: 500px;
     scale: 1.5;
-  }
+  } */
 
-  .app-logo {
+  /* .app-logo {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -127,12 +134,12 @@
     font-weight: 700;
     color: var(--text-heading);
     letter-spacing: 0.03em;
-  }
+  } */
 
-  .logo-img {
+  /* .logo-img {
     height: 1.4rem;
     width: auto;
-  }
+  } */
 
   .group-form {
     display: flex;
