@@ -12,6 +12,7 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
   },
   "dependencies": {
+    "@lucide/svelte": "^1.22.0",
     "@types/node": "^26.0.1",
     "pg": "^8.22.0",
     "ramda": "^0.32.0"
@@ -23,6 +24,7 @@
     "@types/pg": "^8.20.0",
     "svelte": "^5.56.4",
     "svelte-check": "^4.7.1",
+    "svelte-inspect-value": "^0.11.3",
     "typescript": "^6.0.3",
     "vite": "npm:@voidzero-dev/vite-plus-core@^0.2.1",
     "vite-plus": "catalog:",
