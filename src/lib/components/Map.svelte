@@ -2,7 +2,7 @@
   import type { WaylinePointItem } from "$lib/types";
 
   const { points }: { points: WaylinePointItem[] } = $props();
-  $inspect(points);
+  // $inspect(points);
   let mapEl = $state<HTMLDivElement>();
   let map: any;
   let frameId = 0;
@@ -98,10 +98,14 @@
             "interpolate",
             ["linear"],
             ["get", "height"],
-            0,   "#4fc3f7",   // blue — ground
-            50,  "#81c784",   // green — low altitude
-            120, "#ffb74d",   // orange — mid
-            220, "#e57373",   // red — high
+            0,
+            "#4fc3f7", // blue — ground
+            50,
+            "#81c784", // green — low altitude
+            120,
+            "#ffb74d", // orange — mid
+            220,
+            "#e57373", // red — high
           ],
         },
       });
@@ -119,9 +123,7 @@
         const [lng, lat] = e.features[0].geometry.coordinates;
         popup
           .setLngLat([lng, lat])
-          .setHTML(
-            `<strong>#${index}</strong><br>${height}m · ${speed}m/s`,
-          )
+          .setHTML(`<strong>#${index}</strong><br>${height}m · ${speed}m/s`)
           .addTo(map);
       });
 
