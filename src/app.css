@@ -4,19 +4,23 @@
   @apply flex justify-center items-center;
 }
 
+@layer base {
+   button {
+      @apply border rounded-md px-2 py-1 bg-neutral-50  border-neutral-300;
+
+      @apply hover:cursor-pointer;
+   }
+}
+
 @layer components {
   .app-shell {
     @apply relative z-1 h-screen center;
   }
 
-  .app-header {
-    /* general */
-    @apply absolute z-11 flex justify-between;
-
+  .app-landing-header {
     /* mobile */
-    @apply bottom-0 bg-neutral-50 h-[60%] w-[80%] rounded-t-2xl p-3 flex-col items-center opacity-90;
+    @apply absolute z-11 flex justify-between bottom-0 bg-neutral-50 h-[60%] w-[80%] rounded-t-2xl p-3 flex-col items-center opacity-90;
 
-    /* md */
     @apply md:relative md:rounded-xl md:flex-row md:p-2 md:h-auto md:items-center;
 
     @apply lg:px-5;
@@ -39,6 +43,7 @@
   }
 
   .group-input {
+    /* mobile */
     @apply border border-neutral-200 rounded-xl font-mono text-7xl placeholder:text-3xl caret-transparent w-full h-full;
 
     @apply focus:outline-none focus:inset-shadow-sm;

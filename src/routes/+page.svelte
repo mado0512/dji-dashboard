@@ -57,7 +57,7 @@
 ></div>
 
 <div class="app-shell">
-  <header class="app-header">
+  <header class="app-landing-header">
     <span class="app-logo"><img src={logo} alt="Logo" class="logo-img" /></span>
 
     <form
@@ -93,54 +93,6 @@
     width: 100vw;
     height: 100vh;
   } */
-
-  /* ── UI layer on top ──────────────────────────── */
-
-  /* .group-form {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-  } */
-
-  /* .group-input {
-    width: 8rem;
-    padding: 0.35rem var(--space-sm);
-    border: 1px solid var(--border-card);
-    border-radius: var(--radius-sm);
-    background: var(--bg-page);
-    color: var(--text-heading);
-    font-size: 0.85rem;
-    outline: none;
-    transition: border-color 0.15s ease;
-  } */
-
-  .group-input::placeholder {
-    color: var(--text-faint);
-  }
-  .group-input:focus {
-    border-color: var(--border-accent);
-  }
-
-  .group-btn {
-    padding: 0.35rem var(--space-md);
-    border: 1px solid var(--border-card);
-    border-radius: var(--radius-sm);
-    background: var(--bg-subtle);
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition:
-      background 0.15s ease,
-      border-color 0.15s ease;
-  }
-
-  .group-btn:hover {
-    background: var(--bg-card-hover);
-    border-color: var(--border-hover);
-  }
-
-  /* ── Loading overlay ──────────────────────────── */
-
   .loading-overlay {
     position: fixed;
     inset: 0;
