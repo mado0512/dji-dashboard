@@ -25,7 +25,7 @@
 </script>
 
 <button
-  class="device-card"
+  class="device-card group"
   class:active={hovered}
   class:drone={icon === "drone"}
   class:rc={icon === "rc"}
@@ -39,9 +39,12 @@
     <img src={rcIcon} alt="Icon of remote controller" class="device-icon" />
   {/if}
   <h2 class="device-card-title">{device.device_nickname}</h2>
-  <div class="device-card-description">
+  <div class="device-card-description group">
     <span class="model-sn">{device.sn}</span>
-    <span class="model-key">{device.device_model_key}</span>
+    <span
+      class="model-key group-hover:text-orange-500 text-neutral-500 font-bitcount font-extralight
+    ">{device.device_model_key}</span
+    >
   </div>
 
   {#if copied}
@@ -72,26 +75,10 @@
       border-color 0.2s ease;
     cursor: pointer;
     overflow: hidden;
-
-    &:hover .model-sn {
-      opacity: 0.8;
-      text-decoration: underline;
-    }
   }
 
-  .device-card.active {
-    z-index: 10; /* ← 修复：抬升当前卡片的层叠上下文，浮层不被兄弟遮挡 */
-    box-shadow: var(--elevation-2);
-    border-color: var(--border-hover);
-    transform: translateY(-2px);
-  }
-
-  .device-icon {
-    flex-shrink: 0;
-    width: 1.2rem;
-    height: 1.2rem;
-    fill: var(--text-muted);
-    transition: fill 0.45s ease;
+  .model-sn {
+    @apply group-hover:opacity-80 underline;
   }
 
   .device-card:hover .device-icon {
@@ -119,20 +106,7 @@
     letter-spacing: 0.04em;
     opacity: 0.2;
     transition: all 0.15s ease;
-    font-family: 'Courier New', Courier, monospace;
-  }
-
-  .model-key {
-    font-size: 1.05rem;
-    font-weight: 300;
-    color: var(--text-muted);
-    font-family: "Bitcount Single";
-    transition: color 0.45s ease;
-  }
-
-  .device-card:hover .model-key {
-    color: orangered;
-    filter: saturate(0.8);
+    font-family: "Courier New", Courier, monospace;
   }
 
   .copied-toast {
@@ -149,7 +123,7 @@
     pointer-events: none;
     animation: toast-pop 1s ease-out forwards;
     /* letter-spacing: 1.1px; */
-    font-family: 'Courier New', Courier, monospace;
+    font-family: "Courier New", Courier, monospace;
   }
 
   @keyframes toast-pop {
@@ -174,9 +148,6 @@
   }
 
   .device-icon {
-    position: absolute;
-    scale: 4.5;
-    transform: translateX(5px) rotateZ(-30deg);
-    opacity: 0.08;
+    @apply absolute scale-[4.5] opacity-5 -rotate-12;
   }
 </style>

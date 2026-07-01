@@ -1,15 +1,19 @@
 @import "tailwindcss";
 
+@theme {
+  --font-bitcount: "Bitcount Single", monospace;
+}
+
 @utility center {
   @apply flex justify-center items-center;
 }
 
 @layer base {
-   button {
-      @apply border rounded-md px-2 py-1 bg-neutral-50  border-neutral-300;
+  button {
+    @apply border rounded-md px-2 py-1 bg-neutral-50  border-neutral-300;
 
-      @apply hover:cursor-pointer;
-   }
+    @apply hover:cursor-pointer;
+  }
 }
 
 @layer components {
