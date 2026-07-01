@@ -56,12 +56,14 @@
   class="scene-bg fixed inset-0 w-screen h-screen"
 ></div>
 
-<div class="app-shell">
+<div class="relative z-1 h-screen center">
   <header class="app-landing-header">
-    <span class="app-logo"><img src={logo} alt="Logo" class="logo-img" /></span>
+    <span class="m-5 center hover:skew-12"
+      ><img class="h-12 md:h-8" src={logo} alt="Logo" /></span
+    >
 
     <form
-      class="group-form"
+      class="flex flex-col w-full h-full justify-end md:flex-row gap-3"
       onsubmit={(e) => {
         e.preventDefault();
         applyGroupId();
@@ -69,7 +71,7 @@
     >
       <input
         id="group-id"
-        class="group-input text-center"
+        class="group-input text-center md:text-start"
         type="text"
         placeholder="输入 group_id"
         bind:value={groupIdInput}
