@@ -19,7 +19,7 @@
 
   .app-landing-header {
     /* mobile */
-    @apply absolute z-11 flex justify-between bottom-0 bg-neutral-50 h-[60%] w-[80%] rounded-t-2xl p-3 flex-col items-center opacity-90;
+    @apply absolute z-11 flex justify-between bottom-0 bg-neutral-50 h-[60%] w-[80%] rounded-t-2xl p-3 flex-col items-center opacity-85;
 
     @apply md:relative md:rounded-xl md:flex-row md:p-2 md:h-auto md:items-center;
 
