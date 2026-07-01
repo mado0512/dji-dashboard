@@ -1,4 +1,54 @@
 @import "tailwindcss";
+
+@utility center {
+  @apply flex justify-center items-center;
+}
+
+@layer components {
+  .app-shell {
+    @apply relative z-1 h-screen center;
+  }
+
+  .app-header {
+    /* general */
+    @apply absolute z-11 flex justify-between;
+
+    /* mobile */
+    @apply bottom-0 bg-neutral-50 h-[60%] w-[80%] rounded-t-2xl p-3 flex-col items-center opacity-90;
+
+    /* md */
+    @apply md:relative md:rounded-xl md:flex-row md:p-2 md:h-auto md:items-center;
+
+    @apply lg:px-5;
+  }
+
+  .app-logo {
+    @apply center m-5;
+  }
+
+  .logo-img {
+    /* mobile */
+    @apply h-16;
+
+    @apply md:h-8;
+  }
+
+  .group-form {
+    @apply flex flex-col gap-3 w-full h-full justify-end;
+    @apply md:flex-row;
+  }
+
+  .group-input {
+    @apply border border-neutral-200 rounded-xl font-mono text-7xl placeholder:text-3xl caret-transparent w-full h-full;
+
+    @apply focus:outline-none focus:inset-shadow-sm;
+
+    @apply md:py-3 md:px-3 md:w-auto  md:h-auto md:text-lg md:placeholder:text-lg;
+  }
+}
+
+/* relative z-11 flex items-center justify-between px-2.5 h-14 bg-neutral-100 border border-neutral-200 shrink-0 rounded-md w-125 scale-150 */
+
 /* ═══════════════════════════════════════════════════════
    Design tokens — Silver / Black
    ═══════════════════════════════════════════════════════ */

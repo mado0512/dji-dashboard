@@ -56,13 +56,9 @@
   class="scene-bg fixed inset-0 w-screen h-screen"
 ></div>
 
-<div
-  class="app-shell relative z-1 flex flex-col min-h-screen justify-center items-center"
->
-  <header
-    class="app-header relative z-11 flex items-center justify-between px-2.5 h-14 bg-neutral-100 border border-neutral-200 shrink-0 rounded-md w-125 scale-150"
-  >
-    <span class="app-logo"><img src={logo} alt="Logo" class="logo-img h-6 w-auto" /></span>
+<div class="app-shell">
+  <header class="app-header">
+    <span class="app-logo"><img src={logo} alt="Logo" class="logo-img" /></span>
 
     <form
       class="group-form"
@@ -73,7 +69,7 @@
     >
       <input
         id="group-id"
-        class="group-input"
+        class="group-input text-center"
         type="text"
         placeholder="输入 group_id"
         bind:value={groupIdInput}
@@ -100,54 +96,13 @@
 
   /* ── UI layer on top ──────────────────────────── */
 
-  /* .app-shell {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    justify-content: center;
-    align-items: center;
-  } */
-
-  /* .app-header {
-    position: relative;
-    z-index: 11;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 var(--space-xl);
-    height: 3.5rem;
-    background: var(--bg-card);
-    border: 1px solid var(--border-light);
-    flex-shrink: 0;
-    border-radius: var(--radius-sm);
-    width: 500px;
-    scale: 1.5;
-  } */
-
-  /* .app-logo {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: var(--text-heading);
-    letter-spacing: 0.03em;
-  } */
-
-  /* .logo-img {
-    height: 1.4rem;
-    width: auto;
-  } */
-
-  .group-form {
+  /* .group-form {
     display: flex;
     align-items: center;
     gap: 0.4rem;
-  }
+  } */
 
-  .group-input {
+  /* .group-input {
     width: 8rem;
     padding: 0.35rem var(--space-sm);
     border: 1px solid var(--border-card);
@@ -157,7 +112,7 @@
     font-size: 0.85rem;
     outline: none;
     transition: border-color 0.15s ease;
-  }
+  } */
 
   .group-input::placeholder {
     color: var(--text-faint);
