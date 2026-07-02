@@ -3,7 +3,7 @@
     $props();
 </script>
 
-<div>
+<div class="px-2">
   <em class="text-neutral-500 font-bold">{value}</em>
   <span class="text-neutral-400 font-normal">{unit}</span>
 </div>
