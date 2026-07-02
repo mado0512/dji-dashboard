@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant admin (&.admin);
+
 @theme {
   --font-bitcount: "Bitcount Single", monospace;
   --font-courier: "Courier New", monospace;
@@ -10,6 +12,10 @@
 }
 
 @layer base {
+  * {
+    @apply duration-150;
+    /* Default 0.15s at least specified */
+  }
   button {
     @apply border rounded-md px-2 py-1 bg-neutral-50  border-neutral-300 transition-all duration-150;
 
@@ -24,9 +30,21 @@
     @apply focus:outline-2 focus:outline-offset-3 focus:outline-neutral-200 focus:-translate-y-1;
   }
 
+  .avatar {
+    @apply center rounded-full aspect-square;
+
+    @apply bg-neutral-300 w-10;
+  }
+
+  .page-container {
+    @apply mx-auto max-w-7xl px-4 w-full;
+
+    @apply sm:px-6 lg:px-8;
+  }
+
   .app-landing-header {
     /* mobile */
-    @apply absolute z-11 flex justify-between bottom-0 bg-neutral-50 h-[60%] w-[80%] rounded-t-2xl p-3 flex-col items-center opacity-85;
+    @apply absolute z-11 flex justify-between bottom-5 bg-neutral-50 h-[60%] w-[80%] rounded-t-2xl p-3 flex-col items-center opacity-85;
 
     @apply md:relative md:rounded-xl md:flex-row md:p-2 md:h-auto md:items-center;
 
