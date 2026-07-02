@@ -13,7 +13,7 @@
   afterNavigate(() => (loading = false));
 </script>
 
-<div class="app-shell">
+<div>
   <AppHeader />
 
   <main class="app-main">
@@ -24,11 +24,3 @@
 
   <AppFooter />
 </div>
-
-<style>
-  .app-shell {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-</style>
