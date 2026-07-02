@@ -41,7 +41,7 @@
   <h2 class="font-bold">{device.device_nickname}</h2>
   <div class="group flex flex-col justify-end gap-1">
     <span
-      class="text-sm font-courier group-hover:opacity-80 group-hover:underline underline-offset-1 opacity-20 transition-all duration-150 ease-in-out text-neutral-500 tracking-wide"
+      class="text-sm font-courier group-hover:opacity-80 group-hover:underline underline-offset-1 opacity-20 transition-all ease-in-out text-neutral-500 tracking-wide"
       >{device.sn}</span
     >
     <span
