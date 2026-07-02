@@ -53,12 +53,12 @@
 
 <div
   id="unicorn-container"
-  class="scene-bg fixed inset-0 w-screen h-screen"
+  class="scene-bg fixed inset-0"
 ></div>
 
 <div class="relative z-1 h-screen center">
-  <header class="app-landing-header">
-    <span class="m-5 center hover:skew-12"
+  <header class="app-landing-header card">
+    <span class="m-5 center"
       ><img class="h-12 md:h-8" src={logo} alt="Logo" /></span
     >
 
@@ -71,7 +71,7 @@
     >
       <input
         id="group-id"
-        class="group-input text-center md:text-start"
+        class="group-input text-center md:text-start placeholder:italic"
         type="text"
         placeholder="输入 group_id"
         bind:value={groupIdInput}
