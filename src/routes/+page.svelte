@@ -84,14 +84,6 @@
 {/if}
 
 <style>
-  /* ── Full-viewport WebGL background ───────────── */
-
-  /* .scene-bg {
-    position: fixed;
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
-  } */
   .loading-overlay {
     position: fixed;
     inset: 0;
