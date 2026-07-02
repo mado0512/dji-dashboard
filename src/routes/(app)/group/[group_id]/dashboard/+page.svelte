@@ -8,7 +8,8 @@
   let { data }: { data: { group_id: string; all_devices: Device[]; users: User[] } } = $props();
 </script>
 
-<div class="dashboard">
+<div class="page-container">
+  <div class="dashboard">
   <div class="titleArea">
     <h1 class="dashboard-title">Group #{data.group_id}</h1>
     <span class="flip-wrap"
@@ -30,6 +31,7 @@
       {/each}
     </ul>
   </div>
+  </div>
 </div>
 
 <style>
@@ -41,7 +43,7 @@
 
   .dashboard {
     font-family: "Noto Sans", "Courier News";
-    margin: 4rem;
+    margin: 2rem 0;
     display: grid;
     grid-template-areas:
       "top"

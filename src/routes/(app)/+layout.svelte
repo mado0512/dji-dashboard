@@ -61,7 +61,9 @@
   </header>
 
   <main class="app-main">
-    {@render children()}
+    <div class="page-container">
+      {@render children()}
+    </div>
   </main>
 
   <footer class="app-footer">

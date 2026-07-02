@@ -6,18 +6,18 @@
   const { data } = $props();
 </script>
 
-<div class="container">
+<div class="container page-container">
   <div class="cardList userCardList">
     <h2 class="list-title">Users</h2>
     {#each data.users as user (user.user_id)}
-      <li class="card"><UserCard {user} /></li>
+      <li><UserCard {user} /></li>
     {/each}
   </div>
 
   <div class="cardList deviceCardList">
     <h2 class="list-title">Devices</h2>
     {#each data.devices as device (device.sn)}
-      <li class="card"><DeviceCard {device} /></li>
+      <li><DeviceCard {device} /></li>
     {/each}
   </div>
   <!-- 
@@ -38,7 +38,6 @@
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-    padding: var(--space-lg);
   }
 
   .container > :global(*) {
@@ -75,7 +74,6 @@
   @media (max-width: 768px) {
     .container {
       flex-direction: column;
-      padding: var(--space-sm);
       gap: var(--space-md);
     }
 
