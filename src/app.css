@@ -21,6 +21,8 @@
     @apply border rounded-md px-2 py-1 bg-neutral-50  border-neutral-300 transition-all duration-150;
 
     @apply hover:cursor-pointer;
+
+    @apply active:brightness-90;
   }
 }
 
@@ -28,7 +30,7 @@
   .card {
     @apply center rounded-md p-2 bg-linear-to-br from-neutral-50 to-neutral-200 border border-neutral-300;
 
-    @apply focus:outline-2 focus:outline-offset-3 focus:outline-neutral-200 focus:-translate-y-1;
+    /* @apply focus:outline-2 focus:outline-offset-3 focus:outline-neutral-200 focus:-translate-y-1; */
   }
 
   .avatar {
