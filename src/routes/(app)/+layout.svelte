@@ -13,7 +13,7 @@
   afterNavigate(() => (loading = false));
 </script>
 
-<div>
+<div class="flex flex-col">
   <AppHeader />
 
   <main class="app-main">
