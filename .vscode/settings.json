@@ -1,3 +1,8 @@
 {
-  "css.customData": [".vscode/css-custom-data.json"]
+  "css.customData": [".vscode/css-custom-data.json"],
+  "[svelte]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "never"
+    }
+  }
 }
