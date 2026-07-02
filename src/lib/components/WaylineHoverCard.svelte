@@ -5,7 +5,7 @@
 
   const { wayline }: { wayline: Wayline } = $props();
 
-  let expanded = $state(false);
+  let map_expanded = $state(false);
 
   const detail = $derived(getWaylineDetailMock(wayline.wayline_id!));
 
@@ -20,36 +20,16 @@
 </script>
 
 <div class="hover-card">
-  <div
+  <button
     class="map-display"
-    class:expanded={expanded}
-    onclick={() => (expanded = !expanded)}
+    class:map_expanded
+    onclick={() => (map_expanded = !map_expanded)}
   >
     <Map points={detail.data.points} />
-  </div>
+  </button>
   <div class="hover-card-row">
     <span class="label">航线 ID</span>
     <span class="value">{wayline.wayline_id ?? "—"}</span>
-  </div>
-  <div class="hover-card-row">
-    <span class="label">类型</span>
-    <span class="value"
-      >{wayline.wayline_type === "mapping" ? "测绘航线" : "航点航线"}</span
-    >
-  </div>
-  <div class="hover-card-row">
-    <span class="label">距离</span>
-    <span class="value">{((wayline.distance ?? 0) / 1000).toFixed(2)} km</span>
-  </div>
-  <div class="hover-card-row">
-    <span class="label">预估时长</span>
-    <span class="value">{Math.round((wayline.duration ?? 0) / 60)} 分钟</span>
-  </div>
-  <div class="hover-card-row">
-    <span class="label">完成动作</span>
-    <span class="value"
-      >{wayline.finish_action === "return_home" ? "自动返航" : "原地降落"}</span
-    >
   </div>
   <div class="hover-card-row">
     <span class="label">创建时间</span>
@@ -57,8 +37,21 @@
   </div>
 </div>
 
-{#if expanded}
-  <div class="backdrop" onclick={() => (expanded = false)}></div>
+<svelte:window
+  onkeydown={(e) => {
+    if (e.key === "Escape") map_expanded = false;
+  }}
+/>
+
+{#if map_expanded}
+  <div
+    class="fixed inset-0 z-99 backdrop-blur-xs"
+    onclick={() => (map_expanded = false)}
+    onkeydown={(e) => {}}
+    role="button"
+    tabindex="0"
+    aria-label="点击或按 Enter 关闭地图"
+  ></div>
 {/if}
 
 <style>
@@ -90,13 +83,13 @@
     margin: var(--space-sm);
     border: 1px solid var(--border-accent);
     transition: all 0.3s ease;
-    &:not(.expanded):hover {
+    &:not(.map_expanded):hover {
       scale: 1.05;
     }
     cursor: zoom-in;
   }
 
-  .expanded {
+  .map_expanded {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -108,14 +101,6 @@
     border-radius: var(--radius-lg);
     cursor: default;
     /* scale: 1 !important; */
-  }
-
-  .backdrop {
-    position: fixed;
-    inset: 0;
-    z-index: 99;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(2px);
   }
 
   .hover-card-row {
