@@ -25,7 +25,7 @@
 </script>
 
 <button
-  class="card group w-60 justify-between relative overflow-hidden"
+  class="card group w-65 justify-between relative overflow-hidden"
   class:active={hovered}
   class:drone={icon === "drone"}
   class:rc={icon === "rc"}
