@@ -51,10 +51,7 @@
   }
 </script>
 
-<div
-  id="unicorn-container"
-  class="scene-bg fixed inset-0"
-></div>
+<div id="unicorn-container" class="scene-bg fixed inset-0"></div>
 
 <div class="relative z-1 h-screen center">
   <header class="app-landing-header card">
@@ -77,7 +74,7 @@
         bind:value={groupIdInput}
         onkeydown={onKeydown}
       />
-      <button type="submit" class="group-btn">查询</button>
+      <button type="submit">查询</button>
     </form>
   </header>
 </div>
