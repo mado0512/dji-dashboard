@@ -71,7 +71,7 @@
     >
       <input
         id="group-id"
-        class="group-input text-center md:text-start placeholder:italic"
+        class="group-input-landing"
         type="text"
         placeholder="输入 group_id"
         bind:value={groupIdInput}
